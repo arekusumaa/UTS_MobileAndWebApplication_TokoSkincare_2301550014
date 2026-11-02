@@ -14,7 +14,8 @@ Semester Ganjil 2026/2027
 | Kelas | A1 / A2DLC |
 | Judul Aplikasi | SkinCare Store |
 | Repository GitHub | _(diisi setelah push)_ |
-| Tautan Figma | https://www.figma.com/design/qVTUEcTMfDeced9ggBp90d/ |
+| Tautan Figma | https://www.figma.com/design/qVTUEcTMfDeced9ggBp90d/-2301550014--%E2%80%93--SkinCareStore--%E2%80%93-Wireframe?node-id=0-1&t=fjQwAe677ezcqBnl-1 |
+| Video Guideline Dosen | https://youtu.be/zX4AaqMxp5I |
 
 ---
 

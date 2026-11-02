@@ -24,7 +24,8 @@ SkinCare Store membantu pengguna menemukan produk skincare yang cocok untuk tipe
 
 ## Tautan
 
-- Desain Figma: https://www.figma.com/design/qVTUEcTMfDeced9ggBp90d/
+- Desain Figma: https://www.figma.com/design/qVTUEcTMfDeced9ggBp90d/-2301550014--%E2%80%93--SkinCareStore--%E2%80%93-Wireframe?node-id=0-1&t=fjQwAe677ezcqBnl-1
+- Video Guideline Dosen: https://youtu.be/zX4AaqMxp5I
 
 ## Cara Menjalankan
 
