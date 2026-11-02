@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -88,14 +89,17 @@ class _FormProdukScreenState extends State<FormProdukScreen> {
         imageUrl: null,
       );
 
+      final messenger = ScaffoldMessenger.of(context);
       if (widget.product != null) {
         provider.updateProduct(product);
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.hideCurrentSnackBar();
+        messenger.showSnackBar(
           const SnackBar(content: Text('Produk berhasil diperbarui')),
         );
       } else {
         provider.addProduct(product);
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.hideCurrentSnackBar();
+        messenger.showSnackBar(
           const SnackBar(content: Text('Produk berhasil ditambahkan')),
         );
       }
@@ -115,6 +119,7 @@ class _FormProdukScreenState extends State<FormProdukScreen> {
       ),
       body: Form(
         key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppConstants.margin),
           child: Column(
@@ -128,6 +133,7 @@ class _FormProdukScreenState extends State<FormProdukScreen> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 value: _kategori,
+                isExpanded: true,
                 decoration: const InputDecoration(labelText: 'Kategori'),
                 items: kategoriProduk.map((k) => DropdownMenuItem(value: k, child: Text(k))).toList(),
                 onChanged: (v) => setState(() => _kategori = v!),
@@ -139,8 +145,9 @@ class _FormProdukScreenState extends State<FormProdukScreen> {
                     child: TextFormField(
                       controller: _hargaController,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: const InputDecoration(labelText: 'Harga (Rp)'),
-                      validator: (v) => Validators.numeric(v, fieldName: 'Harga'),
+                      validator: (v) => Validators.positiveNumeric(v, fieldName: 'Harga'),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -148,8 +155,9 @@ class _FormProdukScreenState extends State<FormProdukScreen> {
                     child: TextFormField(
                       controller: _stokController,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: const InputDecoration(labelText: 'Stok'),
-                      validator: (v) => Validators.numeric(v, fieldName: 'Stok'),
+                      validator: (v) => Validators.positiveNumeric(v, fieldName: 'Stok'),
                     ),
                   ),
                 ],
@@ -221,6 +229,7 @@ class _FormProdukScreenState extends State<FormProdukScreen> {
               // PAO
               DropdownButtonFormField<int>(
                 value: _paoBulan,
+                isExpanded: true,
                 decoration: const InputDecoration(labelText: 'PAO (Masa Pakai Setelah Dibuka)'),
                 items: const [
                   DropdownMenuItem(value: 6, child: Text('6 Bulan')),

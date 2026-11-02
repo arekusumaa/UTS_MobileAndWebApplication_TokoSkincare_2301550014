@@ -118,6 +118,7 @@ class KelolaPesananScreen extends StatelessWidget {
                                   selected: order.status == status,
                                   onSelected: (_) {
                                     orderProvider.updateOrderStatus(order.id, status);
+                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text('Status diubah ke: ${status.label}')),
                                     );

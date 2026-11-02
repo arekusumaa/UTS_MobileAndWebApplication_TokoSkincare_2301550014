@@ -235,6 +235,7 @@ class DetailProdukScreen extends StatelessWidget {
                   ? null
                   : () {
                       cart.addToCart(product);
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('${product.nama} ditambah ke keranjang'),

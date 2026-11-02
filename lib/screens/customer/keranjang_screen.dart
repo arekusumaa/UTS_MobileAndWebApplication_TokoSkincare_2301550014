@@ -60,6 +60,7 @@ class KeranjangScreen extends StatelessWidget {
                         onDecrement: () => cart.decrementQuantity(item.product.id),
                         onRemove: () {
                           cart.removeFromCart(item.product.id);
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('${item.product.nama} dihapus dari keranjang'),

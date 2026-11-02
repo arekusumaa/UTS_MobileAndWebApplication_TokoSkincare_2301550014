@@ -58,6 +58,7 @@ class KelolaProdukScreen extends StatelessWidget {
                               onPressed: () {
                                 productProvider.deleteProduct(p.id);
                                 Navigator.pop(ctx);
+                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('${p.nama} dihapus')),
                                 );

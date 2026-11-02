@@ -87,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 32),
               Form(
                 key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

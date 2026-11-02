@@ -43,8 +43,10 @@ class _ProfilKulitScreenState extends State<ProfilKulitScreen> {
   }
 
   void _saveProfile() {
+    final messenger = ScaffoldMessenger.of(context);
     if (_tipeKulit == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(
         const SnackBar(content: Text('Pilih tipe kulit Anda terlebih dahulu')),
       );
       return;
@@ -66,7 +68,8 @@ class _ProfilKulitScreenState extends State<ProfilKulitScreen> {
       ),
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
       const SnackBar(content: Text('Profil kulit berhasil disimpan!')),
     );
     Navigator.pop(context);

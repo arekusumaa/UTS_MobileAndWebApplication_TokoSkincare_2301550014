@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
@@ -64,6 +65,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
       cart.clearCart();
 
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Pesanan berhasil dibuat! Status: Menunggu')),
+        );
+      }
+
       context.go('/status-pesanan');
     }
   }
@@ -97,6 +105,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     final formContent = Form(
       key: _formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -114,11 +123,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           TextFormField(
             controller: _teleponController,
             keyboardType: TextInputType.phone,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: const InputDecoration(
               labelText: 'Nomor Telepon',
               prefixIcon: Icon(Icons.phone_outlined),
             ),
-            validator: (v) => Validators.numeric(v, fieldName: 'Nomor Telepon'),
+            validator: (v) => Validators.phone(v),
           ),
           const SizedBox(height: 12),
           TextFormField(

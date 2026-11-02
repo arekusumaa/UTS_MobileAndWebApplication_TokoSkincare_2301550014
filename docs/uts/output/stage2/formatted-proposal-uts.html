@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Proposal UTS — SkinCare Store</title>
+<style>
+body { font-family: 'Calibri', 'Arial', sans-serif; font-size: 11pt; line-height: 1.5; color: #333; margin: 40px; }
+h1 { font-size: 20pt; color: #D95778; text-align: center; margin-bottom: 4pt; }
+h2 { font-size: 14pt; color: #D95778; border-bottom: 2px solid #D95778; padding-bottom: 4pt; margin-top: 24pt; }
+h3 { font-size: 12pt; color: #444; margin-top: 16pt; }
+table { width: 100%; border-collapse: collapse; margin: 8pt 0; font-size: 10pt; }
+th { background-color: #D95778; color: white; padding: 6pt 8pt; text-align: left; }
+td { border: 1px solid #ddd; padding: 6pt 8pt; vertical-align: top; }
+tr:nth-child(even) { background-color: #fdf2f5; }
+code { background-color: #f5f5f5; padding: 2pt 4pt; border-radius: 3pt; font-family: 'Consolas', monospace; font-size: 9pt; }
+pre { background-color: #f5f5f5; padding: 12pt; border-radius: 6pt; overflow-x: auto; font-size: 9pt; line-height: 1.4; }
+.subtitle { text-align: center; font-size: 12pt; color: #666; margin-bottom: 20pt; }
+.identitas-table { max-width: 400pt; margin: 0 auto 20pt; }
+.section { margin-bottom: 16pt; }
+ul, ol { margin-left: 20pt; }
+strong { color: #D95778; }
+blockquote { border-left: 4px solid #D95778; margin: 12pt 0; padding: 8pt 16pt; background-color: #fdf2f5; }
+.flow { font-family: 'Consolas', monospace; font-size: 9pt; white-space: pre; background: #f5f5f5; padding: 12pt; border-radius: 6pt; }
+</style>
+</head>
+<body>
+
+<h1>Proposal UTS — SkinCare Store</h1>
+<p class="subtitle">Mobile and Web Application Development — Kelas A1<br>Semester Ganjil 2026/2027</p>
+
+<h2>Identitas</h2>
+<table class="identitas-table">
+<tr><th style="width:30%">Item</th><th>Keterangan</th></tr>
+<tr><td>Nama</td><td>Are Kusuma Pratiwi</td></tr>
+<tr><td>NIM</td><td>23.01.55.0014</td></tr>
+<tr><td>Kelas</td><td>A1 / A2DLC</td></tr>
+<tr><td>Judul Aplikasi</td><td>SkinCare Store</td></tr>
+<tr><td>Repository GitHub</td><td>(diisi setelah push)</td></tr>
+<tr><td>Tautan Figma</td><td>https://www.figma.com/design/qVTUEcTMfDeced9ggBp90d/</td></tr>
+</table>
+
+<h2>1. Problem Statement</h2>
+<p>Banyak pengguna skincare, terutama pemula, kesulitan memilih produk yang sesuai dengan tipe kulit mereka. Masalah utama yang diselesaikan SkinCare Store:</p>
+<ol>
+<li><strong>Kebingungan memilih produk</strong>: Pengguna tidak tahu produk mana yang cocok untuk tipe kulit mereka (berminyak, kering, kombinasi, sensitif, normal). Banyak produk di pasaran dengan klaim yang membingungkan.</li>
+<li><strong>Tidak ada personalisasi</strong>: Toko skincare online umumnya hanya menampilkan katalog tanpa mempertimbangkan profil kulit pengguna. Pengguna harus riset sendiri untuk mencocokkan kandungan aktif dengan kebutuhan kulitnya.</li>
+<li><strong>Tidak ada informasi PAO (Period After Opening)</strong>: Pengguna sering menggunakan produk skincare yang sudah kedaluwarsa setelah dibuka karena tidak ada pengingat masa pakai. PAO penting karena produk aktif seperti Vitamin C dan Retinol kehilangan efektivitas setelah melewati masa pakai.</li>
+<li><strong>Alergi dan iritasi</strong>: Pengguna tidak memiliki cara sistematis untuk mencatat alergi terhadap bahan tertentu (misalnya fragrance, alcohol) dan memastikan produk yang dipilih tidak mengandung bahan tersebut.</li>
+</ol>
+<p><strong>Mengapa penting</strong>: Salah memilih skincare dapat menyebabkan iritasi, breakouts, dan pemborosan uang. Survei menunjukkan 70% pengguna skincare pemula membeli produk yang tidak sesuai dengan tipe kulitnya.</p>
+
+<h2>2. Persona</h2>
+<h3>Persona Utama: Rina, Mahasiswa Skincare Enthusiast</h3>
+<table>
+<tr><th style="width:25%">Atribut</th><th>Detail</th></tr>
+<tr><td>Nama</td><td>Rina Pratiwi</td></tr>
+<tr><td>Usia</td><td>21 tahun</td></tr>
+<tr><td>Status</td><td>Mahasiswa S1 Semester 5</td></tr>
+<tr><td>Tipe Kulit</td><td>Berminyak, cenderung berjerawat</td></tr>
+<tr><td>Concern</td><td>Jerawat, pori-pari besar, kulit kusam</td></tr>
+<tr><td>Alergi</td><td>Fragrance</td></tr>
+<tr><td>Budget</td><td>Rp 50.000 - Rp 100.000 per produk</td></tr>
+<tr><td>Perangkat</td><td>Android (realme), laptop (Chrome)</td></tr>
+<tr><td>Tujuan</td><td>Mencari produk skincare yang cocok untuk kulit berminyaknya tanpa memicu breakouts</td></tr>
+<tr><td>Frustrasi</td><td>Bingung dengan banyaknya produk di e-commerce, tidak tahu kandungan apa yang aman untuk kulitnya</td></tr>
+<tr><td>Tech literacy</td><td>Menengah - aktif menggunakan e-commerce dan media sosial</td></tr>
+</table>
+
+<h3>Persona Sekunder: Admin Toko</h3>
+<table>
+<tr><th style="width:25%">Atribut</th><th>Detail</th></tr>
+<tr><td>Nama</td><td>Admin Toko</td></tr>
+<tr><td>Peran</td><td>Mengelola katalog produk dan pesanan</td></tr>
+<tr><td>Tujuan</td><td>Menambah/mengedit produk, memantau stok, mengubah status pesanan</td></tr>
+<tr><td>Perangkat</td><td>Laptop (Chrome)</td></tr>
+</table>
+
+<h2>3. User Stories (Minimal 5)</h2>
+<table>
+<tr><th>#</th><th>Sebagai</th><th>Saya ingin</th><th>Sehingga</th><th>Prioritas</th></tr>
+<tr><td>US-01</td><td>Pelanggan</td><td>mengisi profil kulit (tipe, concern, alergi)</td><td>sistem dapat merekomendasikan produk yang sesuai</td><td>Must</td></tr>
+<tr><td>US-02</td><td>Pelanggan</td><td>melihat daftar produk dengan filter kategori dan tipe kulit</td><td>saya bisa menemukan produk yang cocok dengan cepat</td><td>Must</td></tr>
+<tr><td>US-03</td><td>Pelanggan</td><td>melihat detail produk (kandungan aktif, manfaat, PAO, cara pakai)</td><td>saya bisa memutuskan apakah produk aman dan tepat untuk saya</td><td>Must</td></tr>
+<tr><td>US-04</td><td>Pelanggan</td><td>menambahkan produk ke keranjang dan checkout</td><td>saya bisa membeli produk yang dipilih</td><td>Must</td></tr>
+<tr><td>US-05</td><td>Pelanggan</td><td>melihat status dan riwayat pesanan</td><td>saya bisa memantau pengiriman pesanan saya</td><td>Must</td></tr>
+<tr><td>US-06</td><td>Pelanggan</td><td>mendaftar akun baru</td><td>saya bisa mulai berbelanja tanpa akun dari admin</td><td>Should</td></tr>
+<tr><td>US-07</td><td>Admin</td><td>menambah, mengedit, dan menghapus produk</td><td>katalog selalu up-to-date</td><td>Must</td></tr>
+<tr><td>US-08</td><td>Admin</td><td>mengubah status pesanan (menunggu → diproses → dikirim → selesai)</td><td>pelanggan dapat memantau progres pesanan</td><td>Must</td></tr>
+</table>
+
+<h2>4. Kebutuhan Fungsional dan Prioritas (MoSCoW)</h2>
+<h3>Must Have (Inti)</h3>
+<table>
+<tr><th>Kode</th><th>Fitur</th><th>Status</th></tr>
+<tr><td>F-01</td><td>Login dengan email &amp; password (validasi form)</td><td>Selesai</td></tr>
+<tr><td>F-02</td><td>Register akun baru (validasi form, konfirmasi password)</td><td>Selesai</td></tr>
+<tr><td>F-03</td><td>Beranda dengan rekomendasi produk berdasarkan profil kulit</td><td>Selesai</td></tr>
+<tr><td>F-04</td><td>Profil kulit: pilih tipe kulit, concern, alergi</td><td>Selesai</td></tr>
+<tr><td>F-05</td><td>Daftar produk dengan filter kategori</td><td>Selesai</td></tr>
+<tr><td>F-06</td><td>Detail produk (kandungan, manfaat, PAO, cara pakai, stok)</td><td>Selesai</td></tr>
+<tr><td>F-07</td><td>Keranjang belanja (tambah, hapus, ubah jumlah)</td><td>Selesai</td></tr>
+<tr><td>F-08</td><td>Checkout dengan form alamat pengiriman + metode pembayaran simulasi</td><td>Selesai</td></tr>
+<tr><td>F-09</td><td>Status pesanan dengan tracker (menunggu → selesai)</td><td>Selesai</td></tr>
+<tr><td>F-10</td><td>Riwayat pesanan</td><td>Selesai</td></tr>
+<tr><td>F-11</td><td>Dashboard admin (kelola produk &amp; pesanan)</td><td>Selesai</td></tr>
+</table>
+
+<h3>Should Have (Pelengkap)</h3>
+<table>
+<tr><th>Kode</th><th>Fitur</th><th>Status</th></tr>
+<tr><td>F-12</td><td>Akun page (profil, logout)</td><td>Selesai</td></tr>
+<tr><td>F-13</td><td>Form tambah/edit produk admin (validasi)</td><td>Selesai</td></tr>
+<tr><td>F-14</td><td>Kelola pesanan admin (ubah status)</td><td>Selesai</td></tr>
+</table>
+
+<h3>Could Have (Masa depan)</h3>
+<table>
+<tr><th>Kode</th><th>Fitur</th></tr>
+<tr><td>F-15</td><td>Search produk berdasarkan nama/kandungan</td></tr>
+<tr><td>F-16</td><td>Upload foto produk</td></tr>
+<tr><td>F-17</td><td>Notifikasi perubahan status pesanan</td></tr>
+<tr><td>F-18</td><td>Rating dan review produk</td></tr>
+</table>
+
+<h2>5. User Flow</h2>
+<div class="flow">Login → Beranda → [Profil Kulit] → Daftar Produk → Detail Produk
+  |         |              |                  |                |
+  |         |              |                  |                ↓
+  |         |              |                  |          [Tambah ke Keranjang]
+  |         v              v                  v                ↓
+  Register  Akun      Profil Kulit      Keranjang ←───────+
+                                        |
+                                        ↓
+                                    Checkout (form alamat + pembayaran)
+                                        |
+                                        ↓
+                                    Status Pesanan
+                                        |
+                                        ↓
+                                    Riwayat Pesanan</div>
+<p><strong>Alur inti</strong>: Login → Beranda → Profil Kulit → Daftar Produk → Detail Produk → Keranjang → Checkout → Status Pesanan</p>
+
+<h2>6. Sitemap / Daftar Halaman</h2>
+<h3>Halaman Pelanggan (11 halaman)</h3>
+<table>
+<tr><th>#</th><th>Halaman</th><th>Route</th><th>Navigasi</th></tr>
+<tr><td>1</td><td>Login</td><td>/login</td><td>Entry point</td></tr>
+<tr><td>2</td><td>Register</td><td>/register</td><td>Push dari Login</td></tr>
+<tr><td>3</td><td>Beranda</td><td>/beranda</td><td>NavigationBar (tab 1)</td></tr>
+<tr><td>4</td><td>Daftar Produk</td><td>/produk</td><td>NavigationBar (tab 2)</td></tr>
+<tr><td>5</td><td>Detail Produk</td><td>/produk/:id</td><td>Push dari Daftar Produk</td></tr>
+<tr><td>6</td><td>Keranjang</td><td>/keranjang</td><td>NavigationBar (tab 3)</td></tr>
+<tr><td>7</td><td>Checkout</td><td>/checkout</td><td>Push dari Keranjang</td></tr>
+<tr><td>8</td><td>Status Pesanan</td><td>/status-pesanan</td><td>Push dari Checkout</td></tr>
+<tr><td>9</td><td>Riwayat Pesanan</td><td>/riwayat</td><td>Push dari Akun</td></tr>
+<tr><td>10</td><td>Profil Kulit</td><td>/profil-kulit</td><td>Push dari Beranda/Akun</td></tr>
+<tr><td>11</td><td>Akun</td><td>/akun</td><td>NavigationBar (tab 4)</td></tr>
+</table>
+
+<h3>Halaman Admin (4 halaman)</h3>
+<table>
+<tr><th>#</th><th>Halaman</th><th>Route</th><th>Navigasi</th></tr>
+<tr><td>12</td><td>Dashboard Admin</td><td>/admin</td><td>Push dari Akun</td></tr>
+<tr><td>13</td><td>Kelola Produk</td><td>/admin/produk</td><td>Push dari Dashboard</td></tr>
+<tr><td>14</td><td>Form Produk</td><td>/admin/produk/form</td><td>Push dari Kelola Produk</td></tr>
+<tr><td>15</td><td>Kelola Pesanan</td><td>/admin/pesanan</td><td>Push dari Dashboard</td></tr>
+</table>
+
+<h3>Navigasi</h3>
+<ul>
+<li><strong>Mobile (&lt;600px)</strong>: Bottom NavigationBar dengan 4 tab (Beranda, Produk, Keranjang, Akun)</li>
+<li><strong>Web (≥600px)</strong>: NavigationRail sidebar di sisi kiri (responsive)</li>
+</ul>
+
+<h2>7. Wireframe / Figma</h2>
+<p><strong>Tautan Figma</strong>: https://www.figma.com/design/qVTUEcTMfDeced9ggBp90d/</p>
+<p><strong>Frame yang dibuat (Minggu 4)</strong>:</p>
+<ol>
+<li>Login</li>
+<li>Beranda</li>
+<li>Daftar Produk</li>
+<li>Keranjang &amp; Checkout</li>
+<li>Status Pesanan</li>
+</ol>
+<p><strong>Style Guide</strong>:</p>
+<ul>
+<li>Warna primer: #D95778 (pink)</li>
+<li>Ukuran teks: judul 24px, subjudul 18px, isi 16px, caption 12px</li>
+<li>Tombol: height 48px, border radius 12px</li>
+<li>Margin: 16px, spacing: kelipatan 8px</li>
+</ul>
+
+<h2>8. Tech Stack</h2>
+<table>
+<tr><th>Komponen</th><th>Teknologi</th><th>Status</th></tr>
+<tr><td>Framework</td><td>Flutter 3.27+ / Dart</td><td>Aktif</td></tr>
+<tr><td>State Management</td><td>Provider 6.1.2</td><td>Aktif</td></tr>
+<tr><td>Routing</td><td>GoRouter 14.6</td><td>Aktif</td></tr>
+<tr><td>Database (saat ini)</td><td>Mock data (List di memori)</td><td>Aktif</td></tr>
+<tr><td>Database (rencana)</td><td>Cloud Firestore (Firebase Spark)</td><td>Rencana Fase 5</td></tr>
+<tr><td>Authentication</td><td>Firebase Auth</td><td>Rencana Fase 5</td></tr>
+<tr><td>Hosting</td><td>Firebase Hosting</td><td>Rencana Fase 5</td></tr>
+<tr><td>Version Control</td><td>Git + GitHub</td><td>Aktif</td></tr>
+<tr><td>Design</td><td>Figma</td><td>Selesai</td></tr>
+</table>
+<p><strong>Arsitektur</strong>: Repository Pattern</p>
+<pre>UI (Screens) → Provider (State) → Repository (Abstract) → DataSource
+                                                        |
+                                            MockDataSource (now)
+                                            FirestoreDataSource (future)</pre>
+
+<h2>9. Rancangan Database Firestore</h2>
+<h3>Collection: users</h3>
+<pre>{
+  "uid": "string (Firebase Auth UID)",
+  "nama": "string",
+  "email": "string",
+  "role": "string (admin | pelanggan)",
+  "createdAt": "timestamp"
+}</pre>
+
+<h3>Collection: products</h3>
+<pre>{
+  "id": "string (auto-generated)",
+  "nama": "string",
+  "kategori": "string (Cleanser | Toner | Serum | Moisturizer | Sunscreen | Mask)",
+  "harga": "number",
+  "stok": "number",
+  "kandunganAktif": "array&lt;string&gt;",
+  "tipeKulitCocok": "array&lt;string&gt;",
+  "paoBulan": "number (6 | 12)",
+  "tanggalBuka": "timestamp | null",
+  "manfaat": "string",
+  "caraPakai": "string",
+  "imageUrl": "string | null",
+  "createdAt": "timestamp",
+  "updatedAt": "timestamp"
+}</pre>
+
+<h3>Collection: skin_profiles</h3>
+<pre>{
+  "userId": "string (ref: users.uid)",
+  "tipeKulit": "string (Berminyak | Kering | Kombinasi | Sensitif | Normal)",
+  "concern": "array&lt;string&gt;",
+  "alergi": "array&lt;string&gt;",
+  "updatedAt": "timestamp"
+}</pre>
+
+<h3>Collection: orders</h3>
+<pre>{
+  "id": "string (auto-generated)",
+  "userId": "string (ref: users.uid)",
+  "items": [
+    {
+      "productId": "string (ref: products.id)",
+      "nama": "string",
+      "harga": "number",
+      "quantity": "number",
+      "subtotal": "number"
+    }
+  ],
+  "total": "number",
+  "status": "string (menunggu | diproses | dikirim | selesai)",
+  "alamat": "string",
+  "namaPenerima": "string",
+  "telepon": "string",
+  "tanggal": "timestamp",
+  "createdAt": "timestamp"
+}</pre>
+
+<h3>Collection: carts</h3>
+<pre>{
+  "userId": "string (ref: users.uid)",
+  "items": [
+    {
+      "productId": "string (ref: products.id)",
+      "quantity": "number"
+    }
+  ],
+  "updatedAt": "timestamp"
+}</pre>
+
+<h3>Relasi Antar Collection</h3>
+<pre>users (1) ──── (1) skin_profiles   [uid = userId]
+users (1) ──── (N) orders           [uid = userId]
+users (1) ──── (1) carts            [uid = userId]
+orders (N) ─── (N) products         [via items[].productId]</pre>
+
+<h3>Catatan Keamanan (Firestore Rules)</h3>
+<ul>
+<li><code>users</code>: read/write own document only (uid == auth.uid)</li>
+<li><code>products</code>: read all (public catalog), write admin only</li>
+<li><code>skin_profiles</code>: read/write own document only</li>
+<li><code>orders</code>: read own orders, write own orders (create), admin can update status</li>
+<li><code>carts</code>: read/write own cart only</li>
+</ul>
+
+<h2>10. Form Validation Test Table (Modul Minggu 7)</h2>
+<h3>Form: Checkout (Alamat Pengiriman)</h3>
+<table>
+<tr><th>#</th><th>Kasus Uji</th><th>Input</th><th>Hasil yang Diharapkan</th><th>Hasil Nyata</th></tr>
+<tr><td>1</td><td>Semua kosong</td><td>Nama, Telepon, Alamat: kosong</td><td>Semua kolom menampilkan pesan wajib diisi</td><td>Sesuai harapan</td></tr>
+<tr><td>2</td><td>Telepon bukan angka</td><td>Telepon: "abc"</td><td>"Nomor telepon harus berupa angka"</td><td>Sesuai harapan</td></tr>
+<tr><td>3</td><td>Telepon terlalu pendek</td><td>Telepon: "123"</td><td>"Nomor telepon minimal 10 digit"</td><td>Sesuai harapan</td></tr>
+<tr><td>4</td><td>Alamat kurang dari 10 karakter</td><td>Alamat: "Jl. A"</td><td>"Alamat minimal 10 karakter"</td><td>Sesuai harapan</td></tr>
+<tr><td>5</td><td>Semua valid</td><td>Nama: "Rina", Telepon: "081234567890", Alamat: "Jl. Merdeka No. 45, Bandung"</td><td>Pesan berhasil: "Pesanan berhasil dibuat!", data tampil di Status Pesanan</td><td>Sesuai harapan</td></tr>
+</table>
+
+<h3>Form: Login</h3>
+<table>
+<tr><th>#</th><th>Kasus Uji</th><th>Input</th><th>Hasil yang Diharapkan</th></tr>
+<tr><td>1</td><td>Email kosong</td><td>Email: kosong</td><td>"Email wajib diisi"</td></tr>
+<tr><td>2</td><td>Email format salah</td><td>Email: "rina@"</td><td>"Format email tidak valid"</td></tr>
+<tr><td>3</td><td>Password kurang dari 6</td><td>Password: "123"</td><td>"Kata sandi minimal 6 karakter"</td></tr>
+<tr><td>4</td><td>Login berhasil</td><td>admin@skincare.id / 123456</td><td>Navigasi ke Dashboard Admin</td></tr>
+<tr><td>5</td><td>Login gagal</td><td>salah@mail.com / 123456</td><td>"Email atau kata sandi salah"</td></tr>
+</table>
+
+<h2>11. Refleksi</h2>
+<p><strong>Bagian wireframe yang paling sulit dibangun</strong>: Detail Produk karena harus menampilkan banyak informasi (kandungan aktif, manfaat, cara pakai, PAO, stok indicator) dalam satu layar tanpa membuatnya terasa berantakan. Solusi: menggunakan Section widget untuk memisahkan informasi secara visual.</p>
+<p><strong>Perbedaan dengan prototipe Figma</strong>: Bottom navigation dari 3 tab menjadi 4 tab (tambah Akun). Layout web dengan NavigationRail sidebar belum ada di wireframe awal.</p>
+<p><strong>Halaman form yang dilengkapi</strong>: Checkout (alamat pengiriman + metode pembayaran), Login, Register, Profil Kulit, dan Form Produk Admin. Semua sudah memiliki validasi dan pesan status.</p>
+<p><strong>Kendala</strong>: GoRouter + Navigator.pushNamed tidak kompatibel (silent failure) — fixed dengan context.go(). Material 3 menghapus selectedItemColor — fixed dengan WidgetStateProperty. Flutter web canvas tidak menerima execCommand untuk input — fixed dengan keyboard simulation.</p>
+<p><strong>Rencana setelah UTS</strong>: Fase 5 — Firebase (Auth + Firestore) menggantikan mock data. Search produk berdasarkan nama/kandungan. Upload foto produk (Firebase Storage).</p>
+
+<h2>12. Jawaban Pertanyaan Penguji</h2>
+<p><strong>1. Masalah apa yang diselesaikan aplikasi Anda?</strong><br>
+Pengguna skincare kesulitan memilih produk yang sesuai dengan tipe kulit mereka. SkinCare Store menyelesaikan ini dengan profil kulit yang dipersonalisasi, rekomendasi produk berdasarkan tipe kulit, dan informasi PAO untuk keamanan penggunaan produk.</p>
+
+<p><strong>2. Siapa pengguna utamanya?</strong><br>
+Mahasiswa dan young adult (18-25 tahun) yang baru memulai rutinitas skincare dan bingung memilih produk. Persona utama: Rina, 21 tahun, kulit berminyak dengan concern jerawat.</p>
+
+<p><strong>3. Mengapa fitur ini yang diprioritaskan?</strong><br>
+Profil kulit dan rekomendasi produk adalah fitur Must karena tanpa personalisasi, aplikasi hanyalah katalog biasa. PAO tracker juga Must karena masalah kesadaran masa pakai produk adalah unique value proposition yang membedakan dari e-commerce biasa.</p>
+
+<p><strong>4. Bagaimana data akan disimpan?</strong><br>
+Saat ini menggunakan mock data (List di memori). Rencana: Firebase Auth untuk autentikasi, Cloud Firestore untuk database dengan 5 collection (users, products, skin_profiles, orders, carts). Firestore dipilih karena real-time sync, offline support, dan terintegrasi dengan ekosistem Firebase. Data akan hilang saat restart sampai Firebase diimplementasi di Fase 5.</p>
+
+</body>
+</html>

@@ -118,6 +118,7 @@ class AkunScreen extends StatelessWidget {
             title: 'Pengaturan',
             subtitle: 'Preferensi aplikasi',
             onTap: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Pengaturan akan tersedia soon')),
               );
