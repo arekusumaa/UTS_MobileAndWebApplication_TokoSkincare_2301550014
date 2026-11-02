@@ -26,6 +26,19 @@ SkinCare Store membantu pengguna menemukan produk skincare yang cocok untuk tipe
 
 - Desain Figma: https://www.figma.com/design/qVTUEcTMfDeced9ggBp90d/-2301550014--%E2%80%93--SkinCareStore--%E2%80%93-Wireframe?node-id=0-1&t=fjQwAe677ezcqBnl-1
 - Video Guideline Dosen: https://youtu.be/zX4AaqMxp5I
+- Video UTS — Masalah, Target, Scope: `video/out/uts-masalah-target-scope.mp4` (lihat [`video/README.md`](video/README.md))
+
+## Video UTS
+
+Video penjelasan **masalah, target pengguna, dan scope** dibuat dengan
+[Remotion](https://www.remotion.dev/) + TTS gratis (`edge-tts`, suara `id-ID-GadisNeural`).
+
+- Durasi 3:25 · 1920×1080 · 30 fps · narasi Bahasa Indonesia · subtitle `.srt`
+- 5 scene: Opening → Masalah → Target Pengguna → Scope → Rencana Teknis
+- Sumber dan cara render ulang: [`video/README.md`](video/README.md)
+
+Bagian **demo prototype berjalan** (bagian 5 brief UTS) direkam terpisah sebagai
+screen recording aplikasi.
 
 ## Cara Menjalankan
 

@@ -1,0 +1,131 @@
+1
+00:00:00,000 --> 00:00:07,038
+Halo, saya Are Kusuma Pratiwi, NIM dua tiga nol satu lima lima nol nol satu empat, kelas A satu.
+
+2
+00:00:07,038 --> 00:00:17,376
+Aplikasi yang saya kembangkan bernama SkinCare Store, sebuah toko skincare yang merekomendasikan produk berdasarkan profil kulit penggunanya.
+
+3
+00:00:17,800 --> 00:00:21,182
+Ada empat masalah yang ingin saya selesaikan.
+
+4
+00:00:21,182 --> 00:00:23,888
+Pertama, kebingungan memilih produk.
+
+5
+00:00:23,888 --> 00:00:34,560
+Pengguna tidak tahu produk mana yang cocok untuk tipe kulitnya, sementara di pasaran ada ratusan produk dengan klaim yang saling bertentangan.
+
+6
+00:00:34,560 --> 00:00:36,889
+Kedua, tidak ada personalisasi.
+
+7
+00:00:36,889 --> 00:00:47,787
+Toko skincare online umumnya hanya menampilkan katalog datar, tanpa mempertimbangkan profil kulit pembeli, sehingga pengguna harus riset sendiri.
+
+8
+00:00:47,787 --> 00:00:53,123
+Ketiga, tidak ada informasi masa pakai setelah produk dibuka, atau PAO.
+
+9
+00:00:53,123 --> 00:01:00,789
+Akibatnya produk aktif seperti vitamin C dan retinol tetap dipakai jauh setelah efektivitasnya hilang.
+
+10
+00:01:00,789 --> 00:01:02,517
+Keempat, risiko alergi.
+
+11
+00:01:02,517 --> 00:01:09,131
+Pengguna tidak punya cara sistematis untuk mencatat bahan yang membuat kulitnya iritasi.
+
+12
+00:01:09,131 --> 00:01:18,976
+Keempat masalah ini penting, karena salah memilih skincare bukan hanya membuang uang, tetapi juga memicu jerawat dan iritasi kulit.
+
+13
+00:01:19,400 --> 00:01:29,990
+Pengguna utama aplikasi ini adalah mahasiswa dan dewasa muda usia delapan belas sampai dua puluh lima tahun yang baru memulai rutinitas skincare.
+
+14
+00:01:29,990 --> 00:01:35,760
+Persona utama saya bernama Rina, dua puluh satu tahun, mahasiswa semester lima.
+
+15
+00:01:35,760 --> 00:01:42,845
+Kulitnya berminyak dan cenderung berjerawat, dengan concern jerawat, pori besar, dan kulit kusam.
+
+16
+00:01:42,845 --> 00:01:48,980
+Ia alergi fragrance, dan budgetnya lima puluh sampai seratus ribu rupiah per produk.
+
+17
+00:01:48,980 --> 00:01:55,042
+Ia aktif berbelanja online, tetapi bingung memilah produk yang aman untuk kulitnya.
+
+18
+00:01:55,042 --> 00:02:01,688
+Persona kedua adalah admin toko, yang mengelola katalog produk dan memproses pesanan masuk.
+
+19
+00:02:02,100 --> 00:02:07,339
+Ruang lingkup yang saya kerjakan dibatasi pada lima belas halaman.
+
+20
+00:02:07,339 --> 00:02:10,196
+Untuk pelanggan ada sebelas halaman:
+
+21
+00:02:10,196 --> 00:02:20,754
+login, register, beranda, daftar produk, detail produk, keranjang, checkout, status pesanan, riwayat pesanan, profil kulit, dan akun.
+
+22
+00:02:20,754 --> 00:02:23,135
+Untuk admin ada empat halaman:
+
+23
+00:02:23,135 --> 00:02:27,739
+dashboard, kelola produk, form produk, dan kelola pesanan.
+
+24
+00:02:27,739 --> 00:02:39,725
+Fitur yang masuk prioritas Must adalah profil kulit, rekomendasi produk, katalog dengan filter, keranjang dan checkout, serta pelacakan status pesanan.
+
+25
+00:02:39,725 --> 00:02:47,821
+Profil kulit dan rekomendasi saya prioritaskan karena tanpa keduanya aplikasi ini hanya katalog biasa.
+
+26
+00:02:47,821 --> 00:02:50,441
+Yang sengaja tidak saya masukkan:
+
+27
+00:02:50,441 --> 00:02:55,044
+pembayaran nyata, notifikasi push, dan unggah foto produk.
+
+28
+00:02:55,044 --> 00:03:00,204
+Seluruh data masih berupa data simulasi yang tersimpan di memori.
+
+29
+00:03:00,633 --> 00:03:10,891
+Rencana teknisnya, Flutter dan Dart untuk antarmuka, Provider untuk manajemen state, dan GoRouter untuk navigasi.
+
+30
+00:03:10,891 --> 00:03:16,156
+Data akan disimpan di Cloud Firestore dengan lima koleksi:
+
+31
+00:03:16,156 --> 00:03:20,695
+users, products, skin profiles, orders, dan carts.
+
+32
+00:03:20,695 --> 00:03:23,237
+Sekian presentasi dari saya.
+
+33
+00:03:23,237 --> 00:03:24,417
+Terima kasih.

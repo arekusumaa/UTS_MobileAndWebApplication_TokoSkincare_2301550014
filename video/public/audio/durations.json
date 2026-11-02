@@ -1,0 +1,32 @@
+{
+  "voice": "id-ID-GadisNeural",
+  "rate": "+8%",
+  "totalSeconds": 202.728,
+  "scenes": {
+    "scene1-opening": {
+      "seconds": 17.376,
+      "words": 36,
+      "file": "scene1-opening.mp3"
+    },
+    "scene2-masalah": {
+      "seconds": 61.176,
+      "words": 113,
+      "file": "scene2-masalah.mp3"
+    },
+    "scene3-target": {
+      "seconds": 42.288,
+      "words": 85,
+      "file": "scene3-target.mp3"
+    },
+    "scene4-scope": {
+      "seconds": 58.104,
+      "words": 102,
+      "file": "scene4-scope.mp3"
+    },
+    "scene5-closing": {
+      "seconds": 23.784,
+      "words": 37,
+      "file": "scene5-closing.mp3"
+    }
+  }
+}

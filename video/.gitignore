@@ -1,0 +1,16 @@
+# Node
+node_modules/
+npm-debug.log*
+.npm/
+
+# Remotion render artifacts (large binaries — video is uploaded separately)
+out/*.mp4
+out/check/
+out/stills/
+
+# Keep subtitles (small, useful in the repo)
+!out/*.srt
+
+# OS
+.DS_Store
+Thumbs.db
