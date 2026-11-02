@@ -1,0 +1,62 @@
+# SkinCare Store
+
+Aplikasi toko skincare dengan pengingat PAO (Period After Opening) dan filter berdasarkan tipe kulit. Proyek individu MK Mobile and Web Application Development.
+
+## Identitas
+
+- **Nama:** Are Kusuma Pratiwi
+- **NIM:** 23.01.55.0014
+- **Kelas:** A1 / A2DLC
+
+## Deskripsi Singkat
+
+SkinCare Store membantu pengguna menemukan produk skincare yang cocok untuk tipe kulitnya. Pengguna dapat mengisi profil kulit (tipe kulit, concern, alergi), menjelajah katalog produk, memesan produk, dan memantau status pesanan. Setiap produk dilengkapi informasi kandungan aktif dan PAO. Tersedia pula dashboard admin untuk mengelola produk dan pesanan.
+
+## Teknologi
+
+- Flutter + Dart (dijalankan di Chrome / web)
+- Provider (state management)
+- GoRouter (navigasi)
+- Mock data (Firestore menyusul di Fase 5)
+
+## Tautan
+
+- Desain Figma: https://www.figma.com/design/qVTUEcTMfDeced9ggBp90d/-2301550014--%E2%80%93--SkinCareStore--%E2%80%93-Wireframe?node-id=0-1
+
+## Cara Menjalankan
+
+```bash
+flutter pub get
+flutter run -d chrome
+```
+
+Akun demo:
+
+| Peran | Email | Password |
+|-------|-------|----------|
+| Admin | admin@skincare.id | 123456 |
+| Pelanggan | rina@mail.com | 123456 |
+
+## Screenshot
+
+![Beranda](docs/screenshot-beranda.png)
+
+## Struktur Project
+
+```
+lib/
+├── core/           # Theme, constants, utils
+├── data/           # Models, repositories, mock data sources
+├── providers/      # State management (Provider)
+├── screens/        # UI (auth, customer, admin)
+├── widgets/        # Reusable widgets
+└── router/         # GoRouter configuration
+```
+
+## Status Pengembangan
+
+- [x] Fase 1 — Layar inti pelanggan (Login, Beranda, Daftar Produk, Detail Produk, Keranjang, Checkout, Status Pesanan)
+- [x] Fase 2 — Layar pelengkap (Register, Akun, Profil Kulit, Riwayat Pesanan)
+- [x] Fase 3 — Layar admin (Dashboard, Kelola Produk, Form Produk, Kelola Pesanan)
+- [x] Fase 4 — Responsive web (bottom nav mobile ↔ sidebar web)
+- [ ] Fase 5 — Firebase (Auth + Firestore)
