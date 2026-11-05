@@ -169,6 +169,6 @@ export const Masalah: React.FC<{ total: number }> = ({ total }) => (
       <ProblemCard key={p.no} p={p} total={total} col={i % 2} row={Math.floor(i / 2)} />
     ))}
     <Callout total={total} />
-    <Watermark index={2} count={5} label="Masalah" />
+    <Watermark index={2} count={6} label="Masalah" />
   </SceneFrame>
 );

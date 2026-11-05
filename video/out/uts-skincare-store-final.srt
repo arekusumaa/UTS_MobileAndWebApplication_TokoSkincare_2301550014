@@ -1,0 +1,219 @@
+1
+00:00:00,000 --> 00:00:07,038
+Halo, saya Are Kusuma Pratiwi, NIM dua tiga nol satu lima lima nol nol satu empat, kelas A satu.
+
+2
+00:00:07,038 --> 00:00:17,376
+Aplikasi yang saya kembangkan bernama SkinCare Store, sebuah toko skincare yang merekomendasikan produk berdasarkan profil kulit penggunanya.
+
+3
+00:00:17,800 --> 00:00:21,182
+Ada empat masalah yang ingin saya selesaikan.
+
+4
+00:00:21,182 --> 00:00:23,888
+Pertama, kebingungan memilih produk.
+
+5
+00:00:23,888 --> 00:00:34,560
+Pengguna tidak tahu produk mana yang cocok untuk tipe kulitnya, sementara di pasaran ada ratusan produk dengan klaim yang saling bertentangan.
+
+6
+00:00:34,560 --> 00:00:36,889
+Kedua, tidak ada personalisasi.
+
+7
+00:00:36,889 --> 00:00:47,787
+Toko skincare online umumnya hanya menampilkan katalog datar, tanpa mempertimbangkan profil kulit pembeli, sehingga pengguna harus riset sendiri.
+
+8
+00:00:47,787 --> 00:00:53,123
+Ketiga, tidak ada informasi masa pakai setelah produk dibuka, atau PAO.
+
+9
+00:00:53,123 --> 00:01:00,789
+Akibatnya produk aktif seperti vitamin C dan retinol tetap dipakai jauh setelah efektivitasnya hilang.
+
+10
+00:01:00,789 --> 00:01:02,517
+Keempat, risiko alergi.
+
+11
+00:01:02,517 --> 00:01:09,131
+Pengguna tidak punya cara sistematis untuk mencatat bahan yang membuat kulitnya iritasi.
+
+12
+00:01:09,131 --> 00:01:18,976
+Keempat masalah ini penting, karena salah memilih skincare bukan hanya membuang uang, tetapi juga memicu jerawat dan iritasi kulit.
+
+13
+00:01:19,400 --> 00:01:29,990
+Pengguna utama aplikasi ini adalah mahasiswa dan dewasa muda usia delapan belas sampai dua puluh lima tahun yang baru memulai rutinitas skincare.
+
+14
+00:01:29,990 --> 00:01:35,760
+Persona utama saya bernama Rina, dua puluh satu tahun, mahasiswa semester lima.
+
+15
+00:01:35,760 --> 00:01:42,845
+Kulitnya berminyak dan cenderung berjerawat, dengan concern jerawat, pori besar, dan kulit kusam.
+
+16
+00:01:42,845 --> 00:01:48,980
+Ia alergi fragrance, dan budgetnya lima puluh sampai seratus ribu rupiah per produk.
+
+17
+00:01:48,980 --> 00:01:55,042
+Ia aktif berbelanja online, tetapi bingung memilah produk yang aman untuk kulitnya.
+
+18
+00:01:55,042 --> 00:02:01,688
+Persona kedua adalah admin toko, yang mengelola katalog produk dan memproses pesanan masuk.
+
+19
+00:02:02,100 --> 00:02:07,339
+Ruang lingkup yang saya kerjakan dibatasi pada lima belas halaman.
+
+20
+00:02:07,339 --> 00:02:10,196
+Untuk pelanggan ada sebelas halaman:
+
+21
+00:02:10,196 --> 00:02:20,754
+login, register, beranda, daftar produk, detail produk, keranjang, checkout, status pesanan, riwayat pesanan, profil kulit, dan akun.
+
+22
+00:02:20,754 --> 00:02:23,135
+Untuk admin ada empat halaman:
+
+23
+00:02:23,135 --> 00:02:27,739
+dashboard, kelola produk, form produk, dan kelola pesanan.
+
+24
+00:02:27,739 --> 00:02:39,725
+Fitur yang masuk prioritas Must adalah profil kulit, rekomendasi produk, katalog dengan filter, keranjang dan checkout, serta pelacakan status pesanan.
+
+25
+00:02:39,725 --> 00:02:47,821
+Profil kulit dan rekomendasi saya prioritaskan karena tanpa keduanya aplikasi ini hanya katalog biasa.
+
+26
+00:02:47,821 --> 00:02:50,441
+Yang sengaja tidak saya masukkan:
+
+27
+00:02:50,441 --> 00:02:55,044
+pembayaran nyata, notifikasi push, dan unggah foto produk.
+
+28
+00:02:55,044 --> 00:03:00,204
+Seluruh data masih berupa data simulasi yang tersimpan di memori.
+
+29
+00:03:00,633 --> 00:03:04,182
+Rancangan aplikasi terdiri dari tiga bagian.
+
+30
+00:03:04,182 --> 00:03:05,714
+Pertama, user flow.
+
+31
+00:03:05,714 --> 00:03:21,923
+Pengguna masuk dari halaman login, kemudian ke beranda, mengisi profil kulit, menjelajahi daftar produk, melihat detail produk, menambahkan ke keranjang, melakukan checkout, dan melihat status pesanan.
+
+32
+00:03:21,923 --> 00:03:23,133
+Kedua, sitemap.
+
+33
+00:03:23,133 --> 00:03:25,472
+Total ada lima belas halaman.
+
+34
+00:03:25,472 --> 00:03:29,504
+Sebelas halaman pelanggan dan empat halaman admin.
+
+35
+00:03:29,504 --> 00:03:30,956
+Ketiga, wireframe.
+
+36
+00:03:30,956 --> 00:03:42,004
+Saya membuat wireframe di Figma pada Minggu empat, dengan lima frame Must dan style guide warna pink D sembilan lima tujuh tujuh delapan.
+
+37
+00:03:42,004 --> 00:03:51,681
+Wireframe tersebut kemudian saya implementasikan ke Flutter, dan screenshot hasil implementasinya dapat dilihat di sini.
+
+38
+00:03:54,033 --> 00:04:05,265
+Sekarang saya jalankan prototipe aplikasinya langsung di browser. Aplikasi ini dibangun dengan Flutter, dan seluruh data masih berupa data simulasi.
+
+39
+00:04:06,833 --> 00:04:12,785
+Ini halaman login. Saya masuk memakai akun pelanggan demo.
+
+40
+00:04:13,833 --> 00:04:17,865
+Berhasil masuk, saya diarahkan ke beranda.
+
+41
+00:04:18,633 --> 00:04:26,913
+Di beranda ada kolom pencarian, ajakan melengkapi profil kulit, filter kategori, dan rekomendasi produk.
+
+42
+00:04:30,633 --> 00:04:38,073
+Menu Produk menampilkan sepuluh produk. Perhatikan badge stok menipis dan stok habis.
+
+43
+00:04:38,233 --> 00:04:47,041
+Saya buka detail produk. Ada kandungan aktif, manfaat, dan informasi masa pakai atau PAO.
+
+44
+00:04:46,233 --> 00:04:49,233
+Produk ditambahkan ke keranjang.
+
+45
+00:04:51,833 --> 00:04:58,673
+Di keranjang terlihat item, jumlah, subtotal, ongkos kirim, dan total.
+
+46
+00:05:00,033 --> 00:05:08,649
+Saya lanjut ke checkout. Tiga kolom: nama penerima, nomor telepon, dan alamat lengkap.
+
+47
+00:05:08,033 --> 00:05:17,537
+Sekarang saya tekan Buat Pesanan tanpa mengisi apa pun. Semua kolom wajib langsung menampilkan pesan kesalahan berwarna merah.
+
+48
+00:05:18,933 --> 00:05:29,517
+Saya isi nomor telepon dengan huruf, tetapi kolom ini memfilter non-angka sehingga huruf tidak masuk. Alamat yang terlalu pendek juga ditolak.
+
+49
+00:05:32,333 --> 00:05:37,157
+Setelah semua terisi dengan benar, pesan kesalahan hilang.
+
+50
+00:05:38,433 --> 00:05:49,353
+Saya tekan Buat Pesanan. Pesanan berhasil dibuat, lalu aplikasi berpindah ke halaman status pesanan dengan nomor pesanan dan timeline pengiriman.
+
+51
+00:05:51,167 --> 00:06:01,425
+Rencana teknisnya, Flutter dan Dart untuk antarmuka, Provider untuk manajemen state, dan GoRouter untuk navigasi.
+
+52
+00:06:01,425 --> 00:06:06,690
+Data akan disimpan di Cloud Firestore dengan lima koleksi:
+
+53
+00:06:06,690 --> 00:06:11,229
+users, products, skin profiles, orders, dan carts.
+
+54
+00:06:11,229 --> 00:06:13,771
+Sekian presentasi dari saya.
+
+55
+00:06:13,771 --> 00:06:14,951
+Terima kasih.

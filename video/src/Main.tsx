@@ -7,6 +7,7 @@ import { Opening } from "./scenes/Opening";
 import { Masalah } from "./scenes/Masalah";
 import { Target } from "./scenes/Target";
 import { Scope } from "./scenes/Scope";
+import { Rancangan } from "./scenes/Rancangan";
 import { Closing } from "./scenes/Closing";
 
 const STARTS: number[] = [];
@@ -28,7 +29,9 @@ const renderScene = (id: string, total: number) => {
       return <Target total={total} />;
     case "scene4-scope":
       return <Scope total={total} />;
-    case "scene5-closing":
+    case "scene5-rancangan":
+      return <Rancangan total={total} />;
+    case "scene6-closing":
       return <Closing total={total} />;
     default:
       return null;

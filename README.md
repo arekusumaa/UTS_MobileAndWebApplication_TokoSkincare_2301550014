@@ -26,19 +26,33 @@ SkinCare Store membantu pengguna menemukan produk skincare yang cocok untuk tipe
 
 - Desain Figma: https://www.figma.com/design/qVTUEcTMfDeced9ggBp90d/-2301550014--%E2%80%93--SkinCareStore--%E2%80%93-Wireframe?node-id=0-1&t=fjQwAe677ezcqBnl-1
 - Video Guideline Dosen: https://youtu.be/zX4AaqMxp5I
-- Video UTS — Masalah, Target, Scope: `video/out/uts-masalah-target-scope.mp4` (lihat [`video/README.md`](video/README.md))
+- Video UTS (lengkap 6:15): [`video/out/uts-skincare-store-final.mp4`](video/out/uts-skincare-store-final.mp4)
+- Proposal UTS: [`docs/uts/proposal-uts-skincare-store.docx`](docs/uts/proposal-uts-skincare-store.docx)
 
 ## Video UTS
 
-Video penjelasan **masalah, target pengguna, dan scope** dibuat dengan
-[Remotion](https://www.remotion.dev/) + TTS gratis (`edge-tts`, suara `id-ID-GadisNeural`).
+Video presentasi UTS berdurasi **6 menit 15 detik** (1920×1080, 30 fps, narasi
+Bahasa Indonesia, subtitle `.srt`), berisi enam bagian sesuai brief:
 
-- Durasi 3:25 · 1920×1080 · 30 fps · narasi Bahasa Indonesia · subtitle `.srt`
-- 5 scene: Opening → Masalah → Target Pengguna → Scope → Rencana Teknis
-- Sumber dan cara render ulang: [`video/README.md`](video/README.md)
+| Waktu | Bagian |
+|-------|--------|
+| 0:00 | **Pembuka** — nama, NIM, kelas, judul aplikasi |
+| 0:17 | **Masalah & pengguna** — 4 pain point, persona Rina + admin |
+| 2:01 | **Kebutuhan & prioritas fitur** — 15 halaman, 5 fitur Must, yang di-exclude |
+| 2:59 | **Rancangan** — user flow, sitemap, wireframe Figma → implementasi Flutter |
+| 3:52 | **Demo prototype berjalan** — 6 halaman terhubung + form tervalidasi |
+| 5:51 | **Rencana teknis & penutup** — tech stack, 5 collection Firestore |
 
-Bagian **demo prototype berjalan** (bagian 5 brief UTS) direkam terpisah sebagai
-screen recording aplikasi.
+Video dibangun dari dua sumber:
+
+1. **Slide** — [Remotion](https://www.remotion.dev/) + TTS gratis (`edge-tts`,
+   suara `id-ID-GadisNeural`), sumber di [`video/src`](video/src).
+2. **Demo prototype** — rekaman aplikasi Flutter web yang benar-benar berjalan,
+   dikendalikan [Playwright](https://playwright.dev/) (klik mouse dan ketikan
+   keyboard sungguhan). Panduan lengkap:
+   [`docs/uts/panduan-demo-prototype.md`](docs/uts/panduan-demo-prototype.md).
+
+Cara render ulang: [`video/README.md`](video/README.md).
 
 ## Cara Menjalankan
 

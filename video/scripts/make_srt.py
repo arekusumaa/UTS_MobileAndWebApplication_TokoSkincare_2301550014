@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
-"""Build a single .srt for the UTS explainer.
+"""Build a single .srt for the final UTS video.
+
+Timeline of out/uts-skincare-store-final.mp4:
+  part A  0.000        -> 232.033   five Remotion scenes (opening .. rancangan)
+  part B  232.033      -> 351.166   live prototype screen recording
+  part C  351.166      -> 375.667   closing scene
 
 Splits each scene's narration into sentence-sized cues and distributes the
-scene's measured audio duration proportionally to character length.
+scene's measured audio duration proportionally to character length. Demo cues
+reuse the exact offsets baked into the demo audio mix.
 """
 import json
 import math
@@ -13,7 +19,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 FPS = 30
 
-# Must match scripts/tts.py SCENES (text only) and durations.json (timing).
+PART_B_START = 232.0333
+PART_B_DURATION = 119.1333
+
+# Must match scripts/tts.py SCENES (text only) and public/audio/durations.json.
 SCENES = [
     (
         "scene1-opening",
@@ -57,7 +66,19 @@ SCENES = [
         "Seluruh data masih berupa data simulasi yang tersimpan di memori.",
     ),
     (
-        "scene5-closing",
+        "scene5-rancangan",
+        "Rancangan aplikasi terdiri dari tiga bagian. "
+        "Pertama, user flow. Pengguna masuk dari halaman login, kemudian ke beranda, "
+        "mengisi profil kulit, menjelajahi daftar produk, melihat detail produk, "
+        "menambahkan ke keranjang, melakukan checkout, dan melihat status pesanan. "
+        "Kedua, sitemap. Total ada lima belas halaman. Sebelas halaman pelanggan dan empat halaman admin. "
+        "Ketiga, wireframe. Saya membuat wireframe di Figma pada Minggu empat, "
+        "dengan lima frame Must dan style guide warna pink D sembilan lima tujuh tujuh delapan. "
+        "Wireframe tersebut kemudian saya implementasikan ke Flutter, dan screenshot hasil implementasinya "
+        "dapat dilihat di sini.",
+    ),
+    (
+        "scene6-closing",
         "Rencana teknisnya, Flutter dan Dart untuk antarmuka, Provider untuk manajemen state, "
         "dan GoRouter untuk navigasi. "
         "Data akan disimpan di Cloud Firestore dengan lima koleksi: users, products, skin profiles, orders, dan carts. "
@@ -70,7 +91,8 @@ TAIL = {
     "scene2-masalah": 12,
     "scene3-target": 12,
     "scene4-scope": 12,
-    "scene5-closing": 20,
+    "scene5-rancangan": 10,
+    "scene6-closing": 20,
 }
 
 
@@ -83,7 +105,6 @@ def ts(seconds: float) -> str:
 
 
 def split_cues(text: str):
-    # Sentence-ish split, keeping the delimiter.
     parts = re.split(r"(?<=[.:])\s+", text.strip())
     return [p.strip() for p in parts if p.strip()]
 
@@ -97,6 +118,9 @@ def main() -> None:
     for scene_id, text in SCENES:
         meta = durations[scene_id]
         audio_start = cursor_frames / FPS
+        # The closing scene is pushed back by the live demo inserted before it.
+        if scene_id == "scene6-closing":
+            audio_start += PART_B_DURATION
         audio_dur = meta["seconds"]
         cursor_frames += math.ceil(meta["seconds"] * FPS) + TAIL[scene_id]
 
@@ -104,10 +128,22 @@ def main() -> None:
         total_chars = sum(len(p) for p in pieces) or 1
         t = audio_start
         for p in pieces:
-            share = len(p) / total_chars
-            dur = audio_dur * share
+            dur = audio_dur * (len(p) / total_chars)
             cues.append((t, min(audio_start + audio_dur, t + dur), p))
             t += dur
+
+    # Demo section: exact offsets from scripts/demo-tts.py.
+    seg_path = os.path.join(ROOT, "out", "demo", "audio", "segments.json")
+    if os.path.exists(seg_path):
+        with open(seg_path, encoding="utf-8") as fh:
+            segments = json.load(fh)
+        for seg in segments:
+            start = PART_B_START + seg["start"]
+            cues.append((start, start + seg["duration"], seg["text"].strip()))
+    else:
+        print("warning: demo segments.json missing, skipping demo cues")
+
+    cues.sort(key=lambda c: c[0])
 
     lines = []
     for i, (start, end, text) in enumerate(cues, start=1):
@@ -116,7 +152,7 @@ def main() -> None:
         lines.append(text)
         lines.append("")
 
-    out = os.path.join(ROOT, "out", "uts-masalah-target-scope.srt")
+    out = os.path.join(ROOT, "out", "uts-skincare-store-final.srt")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines))

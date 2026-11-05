@@ -59,7 +59,19 @@ SCENES = [
         "Seluruh data masih berupa data simulasi yang tersimpan di memori.",
     ),
     (
-        "scene5-closing",
+        "scene5-rancangan",
+        "Rancangan aplikasi terdiri dari tiga bagian. "
+        "Pertama, user flow. Pengguna masuk dari halaman login, kemudian ke beranda, "
+        "mengisi profil kulit, menjelajahi daftar produk, melihat detail produk, "
+        "menambahkan ke keranjang, melakukan checkout, dan melihat status pesanan. "
+        "Kedua, sitemap. Total ada lima belas halaman. Sebelas halaman pelanggan dan empat halaman admin. "
+        "Ketiga, wireframe. Saya membuat wireframe di Figma pada Minggu empat, "
+        "dengan lima frame Must dan style guide warna pink D sembilan lima tujuh tujuh delapan. "
+        "Wireframe tersebut kemudian saya implementasikan ke Flutter, dan screenshot hasil implementasinya "
+        "dapat dilihat di sini.",
+    ),
+    (
+        "scene6-closing",
         "Rencana teknisnya, Flutter dan Dart untuk antarmuka, Provider untuk manajemen state, "
         "dan GoRouter untuk navigasi. "
         "Data akan disimpan di Cloud Firestore dengan lima koleksi: users, products, skin profiles, orders, dan carts. "

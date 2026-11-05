@@ -173,6 +173,6 @@ export const Closing: React.FC<{ total: number }> = ({ total }) => (
       />
     ))}
     <Thanks total={total} />
-    <Watermark index={5} count={5} label="Penutup" />
+    <Watermark index={6} count={6} label="Penutup" />
   </SceneFrame>
 );

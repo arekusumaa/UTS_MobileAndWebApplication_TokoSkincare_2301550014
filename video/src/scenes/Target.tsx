@@ -200,6 +200,6 @@ export const Target: React.FC<{ total: number }> = ({ total }) => (
       />
     ))}
     <AdminCard total={total} />
-    <Watermark index={3} count={5} label="Target" />
+    <Watermark index={3} count={6} label="Target" />
   </SceneFrame>
 );

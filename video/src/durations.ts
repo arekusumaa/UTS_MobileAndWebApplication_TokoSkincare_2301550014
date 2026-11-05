@@ -13,8 +13,9 @@ export const SCENES: SceneMeta[] = [
   { id: 'scene2-masalah', file: 'scene2-masalah.mp3', seconds: 61.176, frames: 1848 },
   { id: 'scene3-target', file: 'scene3-target.mp3', seconds: 42.288, frames: 1281 },
   { id: 'scene4-scope', file: 'scene4-scope.mp3', seconds: 58.104, frames: 1756 },
-  { id: 'scene5-closing', file: 'scene5-closing.mp3', seconds: 23.784, frames: 734 },
+  { id: 'scene5-rancangan', file: 'scene5-rancangan.mp3', seconds: 51.048, frames: 1542 },
+  { id: 'scene6-closing', file: 'scene6-closing.mp3', seconds: 23.784, frames: 734 },
 ];
 
-export const TOTAL_FRAMES = 6153;
-export const TOTAL_SECONDS = 205.1;
+export const TOTAL_FRAMES = 7695;
+export const TOTAL_SECONDS = 256.5;

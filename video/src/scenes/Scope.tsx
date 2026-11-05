@@ -230,6 +230,6 @@ export const Scope: React.FC<{ total: number }> = ({ total }) => (
     <PagesPanel total={total} />
     <PriorityPanel total={total} />
     <Note total={total} />
-    <Watermark index={4} count={5} label="Scope" />
+    <Watermark index={4} count={6} label="Scope" />
   </SceneFrame>
 );

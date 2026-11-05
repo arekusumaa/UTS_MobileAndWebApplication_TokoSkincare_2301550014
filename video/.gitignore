@@ -3,12 +3,17 @@ node_modules/
 npm-debug.log*
 .npm/
 
-# Remotion render artifacts (large binaries — video is uploaded separately)
+# Remotion render artifacts
 out/*.mp4
 out/check/
+out/check2/
 out/stills/
+out/tmp/
+out/demo/
+out/final/
 
-# Keep subtitles (small, useful in the repo)
+# Keep the final deliverable and the subtitles (small enough, useful in the repo)
+!out/uts-skincare-store-final.mp4
 !out/*.srt
 
 # OS

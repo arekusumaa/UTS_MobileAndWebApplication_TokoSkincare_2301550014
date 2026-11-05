@@ -1,23 +1,39 @@
-# Video UTS — Masalah, Target, Scope
+# Video UTS — SkinCare Store
 
 Video presentasi UTS untuk project **SkinCare Store**, dibuat dengan
-**Remotion** (React → MP4) dan **edge-tts** (text-to-speech gratis).
+**Remotion** (React → MP4), **edge-tts** (text-to-speech gratis), dan
+**Playwright** (merekam demo prototype yang benar-benar berjalan).
 
-**Hasil:** `out/uts-masalah-target-scope.mp4` — 1920×1080, 30 fps, ±3 menit 25 detik, narasi Bahasa Indonesia.
+**Hasil:** `out/uts-skincare-store-final.mp4`
+1920×1080, 30 fps, H.264 + AAC, **6 menit 15 detik**, narasi Bahasa Indonesia.
+Subtitle: `out/uts-skincare-store-final.srt` (55 cue).
 
 ## Isi video
 
-| # | Scene | Durasi | Isi |
-|---|-------|--------|-----|
-| 1 | Opening | 0:17 | Identitas: nama, NIM, kelas, judul aplikasi |
-| 2 | Masalah | 1:01 | 4 pain point + dampaknya bagi pengguna |
-| 3 | Target pengguna | 0:42 | Persona utama (Rina) + persona sekunder (Admin) |
-| 4 | Scope | 0:58 | 15 halaman, 5 fitur Must, yang sengaja tidak termasuk |
-| 5 | Rencana teknis | 0:24 | Tech stack + 5 collection Firestore + penutup |
+| Waktu | Bagian | Isi |
+|-------|--------|-----|
+| 0:00 | Pembuka | Nama, NIM, kelas, judul aplikasi |
+| 0:17 | Masalah | 4 pain point + dampaknya bagi pengguna |
+| 1:18 | Target pengguna | Persona utama (Rina) + persona sekunder (Admin) |
+| 2:01 | Scope | 15 halaman, 5 fitur Must, yang sengaja tidak termasuk |
+| 2:59 | Rancangan | User flow, sitemap 15 halaman, wireframe Figma → Flutter |
+| 3:52 | **Demo prototype** | Rekaman aplikasi berjalan: login → beranda → produk → detail → keranjang → checkout (validasi) → status pesanan |
+| 5:51 | Penutup | Tech stack, 5 collection Firestore, terima kasih |
 
-Video ini **hanya** membahas masalah, target, dan scope. Bagian **demo prototype
-berjalan** (bagian 5 brief UTS, bobot terbesar) tetap direkam terpisah sebagai
-screen recording aplikasi.
+## Dua sumber video
+
+Video final adalah gabungan tiga bagian yang di-encode dengan parameter identik:
+
+```
+part-a.mp4   lima slide Remotion         0:00 - 3:52
+part-b.mp4   rekaman demo Playwright     3:52 - 5:51
+part-c.mp4   slide penutup               5:51 - 6:15
+```
+
+Bagian demo **tidak** dibuat dengan Remotion, karena Remotion hanya me-render
+komposisi React — ia tidak bisa merekam interaksi aplikasi. Bagian itu direkam
+dari `build/web` yang benar-benar berjalan. Panduan lengkapnya ada di
+[`../docs/uts/panduan-demo-prototype.md`](../docs/uts/panduan-demo-prototype.md).
 
 ## Struktur
 
@@ -30,10 +46,13 @@ video/
 │   ├── audio/                  # narasi TTS per scene + durations.json
 │   └── screenshots/            # screenshot aplikasi (1600×900)
 ├── scripts/
+│   ├── tts.py                  # narasi slide + durations.json
+│   ├── make_srt.py             # subtitle untuk video final
+│   ├── demo-record.js          # rekam demo prototype (Playwright)
+│   ├── demo-tts.py             # narasi demo + mix ke rekaman
+│   ├── lib/flutter.js          # helper kendali aplikasi Flutter web
 │   ├── capture.sh              # ambil screenshot via agent-browser
-│   ├── capture-detail.sh       # percobaan detail/checkout (opsional)
-│   ├── tts.py                  # generate narasi + durations.json
-│   └── make_srt.py             # generate subtitle .srt
+│   └── capture-detail.sh       # percobaan detail/checkout (opsional)
 ├── src/
 │   ├── index.ts                # registerRoot
 │   ├── Root.tsx                # Composition
@@ -42,11 +61,13 @@ video/
 │   ├── theme.ts                # warna brand & tipografi
 │   ├── anim.ts                 # helper animasi (useIn, riseIn, envelope)
 │   ├── components/ui.tsx       # Background, Logo, Panel, Chip, SceneFrame
-│   └── scenes/                 # Opening, Masalah, Target, Scope, Closing
+│   └── scenes/                 # Opening, Masalah, Target, Scope, Rancangan, Closing
 └── out/
-    ├── uts-masalah-target-scope.mp4
-    ├── uts-masalah-target-scope.srt
-    └── stills/                 # still per scene untuk review
+    ├── uts-skincare-store-final.mp4
+    ├── uts-skincare-store-final.srt
+    ├── full-explainer.mp4      # lima slide + penutup, tanpa demo
+    ├── demo/                   # rekaman demo + narasi
+    └── final/                  # part-a/b/c sebelum digabung
 ```
 
 ## Cara menjalankan ulang
@@ -55,19 +76,26 @@ video/
 cd video
 npm install
 
-# 1. Regenerate narasi (butuh python + edge-tts + mutagen)
+# 1. Narasi slide (butuh python + edge-tts + mutagen)
 python scripts/tts.py
 
-# 2. Regenerate src/durations.ts dari durasi audio yang baru
-#    (lihat perintah di bawah — frame = ceil(detik * 30) + tail)
+# 2. Regenerate src/durations.ts (lihat perintah di bawah)
 
 # 3. Preview interaktif
 npm run dev
 
-# 4. Render MP4
+# 4. Render slide
 npm run render
 
-# 5. Subtitle
+# 5. Rekam demo prototype (server build/web harus jalan di :8137)
+node scripts/demo-record.js --video
+ffmpeg -i out/demo/raw/page@*.webm -vf "scale=1600:900" -r 30 \
+  -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -an -y out/demo/demo-silent.mp4
+python scripts/demo-tts.py
+
+# 6. Gabung part-a + part-b + part-c (lihat panduan demo, bagian 5)
+
+# 7. Subtitle
 python scripts/make_srt.py
 ```
 
@@ -78,15 +106,17 @@ python -c "
 import json, math
 d = json.load(open('public/audio/durations.json', encoding='utf-8'))
 FPS = 30
-tail = {'scene1-opening':12,'scene2-masalah':12,'scene3-target':12,'scene4-scope':12,'scene5-closing':20}
-order = ['scene1-opening','scene2-masalah','scene3-target','scene4-scope','scene5-closing']
+tail = {'scene1-opening':12,'scene2-masalah':12,'scene3-target':12,'scene4-scope':12,
+        'scene5-rancangan':10,'scene6-closing':20}
+order = ['scene1-opening','scene2-masalah','scene3-target','scene4-scope',
+         'scene5-rancangan','scene6-closing']
 out = ['// AUTO-GENERATED by scripts/tts.py — do not edit by hand.', f'export const FPS = {FPS};', '',
        'export type SceneMeta = { id: string; file: string; seconds: number; frames: number };', '',
        'export const SCENES: SceneMeta[] = [']
 total = 0
 for k in order:
     v = d['scenes'][k]; f = math.ceil(v['seconds']*FPS)+tail[k]; total += f
-    out.append(f\"  {{ id: '{k}', file: '{v['file']}', seconds: {v['seconds']}, frames: {f} }} ,\")
+    out.append(f\"  {{ id: '{k}', file: '{v['file']}', seconds: {v['seconds']}, frames: {f} }},\")
 out += ['];', '', f'export const TOTAL_FRAMES = {total};', f'export const TOTAL_SECONDS = {round(total/FPS,3)};']
 open('src/durations.ts','w',encoding='utf-8').write('\n'.join(out)+'\n')
 "
@@ -98,9 +128,13 @@ open('src/durations.ts','w',encoding='utf-8').write('\n'.join(out)+'\n')
   Jadi narasi dan visual tidak pernah meleset.
 - **TTS gratis tanpa API key** — `edge-tts` memakai endpoint suara Microsoft Edge
   (`id-ID-GadisNeural`). Jika suatu saat diblokir, fallback ke `gTTS` (Google Translate TTS).
-- **Remotion tidak butuh ffmpeg eksternal** — Remotion 4.x membawa ffmpeg sendiri.
-- **Screenshot aplikasi** diambil otomatis dari `build/web` lewat `agent-browser`
-  (login demo → navigasi → screenshot 1600×900).
+- **Remotion tidak butuh ffmpeg eksternal** — Remotion 4.x membawa ffmpeg sendiri
+  di `node_modules/@remotion/compositor-*`.
+- **ffmpeg bawaan Remotion menolak filter bernilai tunggal** seperti `fps=30` atau
+  `setsar=1`. Pakai opsi output `-r 30` dan filter `scale=W:H` saja.
+- **Demo direkam Playwright**, bukan tangan: klik mouse dan ketikan keyboard sungguhan
+  ke aplikasi Flutter web, lalu direkam jadi `.webm`. Browser diambil dari
+  `node_modules/.remotion/chrome-headless-shell` (tidak perlu unduh Chromium lagi).
 - **Lisensi Remotion** gratis untuk individu/mahasiswa; lisensi company hanya
   diperlukan untuk perusahaan >3 karyawan.
 
@@ -108,8 +142,10 @@ open('src/durations.ts','w',encoding='utf-8').write('\n'.join(out)+'\n')
 
 | Ingin mengubah | Ubah di |
 |---|---|
-| Teks narasi | `scripts/tts.py` (daftar `SCENES`) lalu jalankan ulang tts.py |
+| Teks narasi slide | `scripts/tts.py` (daftar `SCENES`) lalu jalankan ulang |
+| Teks narasi demo | `scripts/demo-tts.py` (daftar `SEGMENTS`) lalu jalankan ulang |
 | Suara TTS | `VOICE` di `scripts/tts.py` (`id-ID-GadisNeural` / `id-ID-ArdiNeural`) |
 | Kecepatan bicara | `RATE` di `scripts/tts.py` (mis. `+12%`) |
 | Warna brand | `src/theme.ts` |
 | Isi kartu masalah / persona / collection | `src/scenes/*.tsx` |
+| Alur demo | `scripts/demo-record.js` |
