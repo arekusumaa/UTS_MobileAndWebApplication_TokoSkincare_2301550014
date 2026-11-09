@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import '../data/models/product.dart';
 import '../data/data_sources/mock_product_source.dart';
+import '../data/repositories/product_repository.dart';
 
 class ProductProvider extends ChangeNotifier {
-  final MockProductSource _productSource = MockProductSource();
+  /// [source] dan [sync] opsional supaya widget test lama tetap bisa memakai
+  /// `ProductProvider()` tanpa Firebase. Di `main.dart` keduanya diisi dari
+  /// `AppRepositories.firestore()`.
+  ProductProvider({ProductRepository? source, Listenable? sync})
+      : _productSource = source ?? MockProductSource(),
+        _sync = sync {
+    _allProducts = _productSource.getAllProducts();
+    _filteredProducts = List.from(_allProducts);
+    _sync?.addListener(_onDataBerubah);
+  }
+
+  final ProductRepository _productSource;
+  final Listenable? _sync;
 
   List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
@@ -17,9 +30,10 @@ class ProductProvider extends ChangeNotifier {
   String get selectedKategori => _selectedKategori;
   String get selectedTipeKulit => _selectedTipeKulit;
 
-  ProductProvider() {
+  /// Dipanggil setiap ada snapshot Firestore baru (dari perangkat mana pun).
+  void _onDataBerubah() {
     _allProducts = _productSource.getAllProducts();
-    _filteredProducts = List.from(_allProducts);
+    _applyFilters();
   }
 
   void setSearchQuery(String query) {
@@ -84,25 +98,27 @@ class ProductProvider extends ChangeNotifier {
   // Admin operations
   void addProduct(Product product) {
     _productSource.addProduct(product);
-    _allProducts = _productSource.getAllProducts();
-    _applyFilters();
+    _onDataBerubah();
   }
 
   void updateProduct(Product product) {
     _productSource.updateProduct(product);
-    _allProducts = _productSource.getAllProducts();
-    _applyFilters();
+    _onDataBerubah();
   }
 
   void deleteProduct(String id) {
     _productSource.deleteProduct(id);
-    _allProducts = _productSource.getAllProducts();
-    _applyFilters();
+    _onDataBerubah();
   }
 
   void reduceStok(String id, int amount) {
     _productSource.reduceStok(id, amount);
-    _allProducts = _productSource.getAllProducts();
-    _applyFilters();
+    _onDataBerubah();
+  }
+
+  @override
+  void dispose() {
+    _sync?.removeListener(_onDataBerubah);
+    super.dispose();
   }
 }
