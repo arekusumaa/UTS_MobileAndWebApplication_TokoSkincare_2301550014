@@ -1,15 +1,23 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'core/theme/app_theme.dart';
+
+import 'firebase_options.dart';
 import 'providers/auth_provider.dart';
 import 'providers/product_provider.dart';
 import 'providers/cart_provider.dart';
 import 'providers/order_provider.dart';
 import 'providers/skin_profile_provider.dart';
-import 'router/app_router.dart';
+import 'screens/auth/cek_status_login.dart';
 
-void main() {
+Future<void> main() async {
+  // ensureInitialized wajib dipanggil sebelum await apa pun.
   WidgetsFlutterBinding.ensureInitialized();
+  // Firebase harus siap sebelum runApp, kalau tidak muncul
+  // "No Firebase App '[DEFAULT]' has been created".
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const SkinCareStoreApp());
 }
 
@@ -26,12 +34,8 @@ class SkinCareStoreApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => SkinProfileProvider()),
       ],
-      child: MaterialApp.router(
-        title: 'SkinCare Store',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        routerConfig: AppRouter.router,
-      ),
+      // Gerbang StreamBuilder menggantikan `home:` pada modul.
+      child: const CekStatusLogin(),
     );
   }
 }
