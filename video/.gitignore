@@ -11,6 +11,8 @@ out/stills/
 out/tmp/
 out/demo/
 out/final/
+# Bukti uji Minggu 9 sudah disalin ke docs/minggu-09/bukti/
+out/m9/
 
 # Keep the final deliverable and the subtitles (small enough, useful in the repo)
 !out/uts-skincare-store-final.mp4

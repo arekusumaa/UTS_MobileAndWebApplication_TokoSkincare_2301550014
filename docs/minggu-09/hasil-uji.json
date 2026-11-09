@@ -1,0 +1,78 @@
+{
+  "tanggal": "2026-11-09T14:21:17.894Z",
+  "url": "http://127.0.0.1:8137/",
+  "hasil": [
+    {
+      "no": 0,
+      "kasus": "Akses awal tanpa login",
+      "input": "Buka /",
+      "diharapkan": "Halaman Masuk tampil (halaman utama terlindungi)",
+      "nyata": "URL #/login, form Masuk tampil",
+      "status": "SESUI"
+    },
+    {
+      "no": 4,
+      "kasus": "Kolom kosong",
+      "input": "—",
+      "diharapkan": "Kedua kolom menampilkan pesan",
+      "nyata": "Email wajib diisi + Password wajib diisi",
+      "status": "SESUI"
+    },
+    {
+      "no": 3,
+      "kasus": "Email tidak valid",
+      "input": "bukan-email / 123456",
+      "diharapkan": "Format email belum benar",
+      "nyata": "Format email belum benar",
+      "status": "SESUI"
+    },
+    {
+      "no": 1,
+      "kasus": "Login benar",
+      "input": "rina@mail.com / 123456",
+      "diharapkan": "Halaman Utama (Beranda) tampil",
+      "nyata": "Beranda tampil, sapaan 'Halo, Rina Simulasi!'",
+      "status": "SESUI"
+    },
+    {
+      "no": 6,
+      "kasus": "Sesi setelah refresh",
+      "input": "F5 pada Beranda",
+      "diharapkan": "Tetap masuk di Halaman Utama",
+      "nyata": "Beranda tetap tampil, URL /beranda",
+      "status": "SESUI"
+    },
+    {
+      "no": 2,
+      "kasus": "Password salah",
+      "input": "rina@mail.com / salah123",
+      "diharapkan": "Email atau password salah",
+      "nyata": "Email atau password salah",
+      "status": "SESUI"
+    },
+    {
+      "no": 5,
+      "kasus": "Daftar dengan email terpakai",
+      "input": "Rina Lagi / rina@mail.com / 123456",
+      "diharapkan": "Email sudah terdaftar. Silakan masuk.",
+      "nyata": "Email sudah terdaftar. Silakan masuk.",
+      "status": "SESUI"
+    },
+    {
+      "no": 7,
+      "kasus": "Tombol Keluar",
+      "input": "Klik ikon Keluar di app bar Beranda",
+      "diharapkan": "Kembali ke Halaman Masuk",
+      "nyata": "Kembali ke #/login tanpa Navigator",
+      "status": "SESUI"
+    },
+    {
+      "no": 8,
+      "kasus": "Akun admin tetap terjangkau",
+      "input": "admin@skincare.id / 123456",
+      "diharapkan": "Menu Dashboard Admin tampil di halaman Akun",
+      "nyata": "Halaman Akun menampilkan badge Admin dan menu Dashboard Admin",
+      "status": "SESUI"
+    }
+  ]
+}

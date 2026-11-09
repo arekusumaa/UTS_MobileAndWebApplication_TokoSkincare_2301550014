@@ -19,8 +19,9 @@ SkinCare Store membantu pengguna menemukan produk skincare yang cocok untuk tipe
 - Flutter + Dart (dijalankan di Chrome / web)
 - Provider (state management)
 - GoRouter (navigasi)
+- **Firebase Authentication 7.0.1 + firebase_core 5.1.0** (login Email/Password, Minggu 9 — paket Spark)
 - Material 3 (warna primer #D95778)
-- Mock data (Firestore menyusul di Fase 5)
+- Mock data untuk produk/keranjang/pesanan (Firestore menyusul di Minggu 10)
 
 ## Tautan
 
@@ -28,6 +29,7 @@ SkinCare Store membantu pengguna menemukan produk skincare yang cocok untuk tipe
 - Video Guideline Dosen: https://youtu.be/zX4AaqMxp5I
 - Video UTS (lengkap 6:15): [`video/out/uts-skincare-store-final.mp4`](video/out/uts-skincare-store-final.mp4)
 - Proposal UTS: [`docs/uts/proposal-uts-skincare-store.docx`](docs/uts/proposal-uts-skincare-store.docx)
+- **Laporan Minggu 9 (Firebase Login)**: [`docs/minggu-09/README.md`](docs/minggu-09/README.md)
 
 ## Video UTS
 
@@ -59,14 +61,55 @@ Cara render ulang: [`video/README.md`](video/README.md).
 ```bash
 flutter pub get
 flutter run -d chrome
+# atau build statis:
+flutter build web --release
 ```
 
-Akun demo:
+> **Mulai Minggu 9 aplikasi wajib terhubung ke Firebase.** `main.dart` memanggil
+> `await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`
+> sebelum `runApp`. Konfigurasi ada di `lib/firebase_options.dart` dan hanya
+> diset untuk platform **web** (target praktikum Minggu 9 = Chrome).
+
+Akun simulasi (tersimpan sungguhan di Firebase Authentication, **bukan** lagi
+data di memori; password ini sengaja bukan password asli):
 
 | Peran | Email | Password |
 |-------|-------|----------|
 | Admin | admin@skincare.id | 123456 |
 | Pelanggan | rina@mail.com | 123456 |
+
+Akun baru juga bisa dibuat langsung lewat tombol **Daftar** pada halaman Masuk.
+
+## Minggu 9 — Firebase Authentication
+
+Project Firebase `toko-skincare-fec17` (paket **Spark**, tanpa billing) sudah
+terhubung. Hanya penyedia **Email/Password** yang diaktifkan; **Firestore belum
+dipakai** (jadwal Minggu 10).
+
+| Yang berjalan | Ringkasan |
+|---|---|
+| Satu halaman dua mode | `lib/screens/auth/masuk_daftar_page.dart` (`_modeDaftar`) — Masuk & Daftar, form tervalidasi, `obscureText`, tombol nonaktif saat proses |
+| Auth gate | `StreamBuilder<User?>` pada `authStateChanges()` + `GoRouterRefreshStream` → redirect otomatis, tanpa `Navigator` |
+| Halaman publik | Hanya `/login` dan `/register`; 13 halaman lain tertutup bagi yang belum masuk |
+| Sesi | Bertahan setelah refresh browser; tombol **Keluar** di app bar Beranda & Dashboard Admin |
+| Pesan kesalahan | 10 kode `FirebaseAuthException` diterjemahkan ke Bahasa Indonesia; kode kredensial disamakan agar tidak membocorkan email terdaftar |
+
+**Verifikasi**: `flutter analyze` 0 error/0 warning · `flutter test` 13 lulus ·
+`flutter build web --release` berhasil · **9 kasus uji integrasi di Chrome: 9 SESUI**.
+
+Dokumentasi lengkap: [tabel uji 9 kasus](docs/minggu-09/tabel-uji-login.md),
+[setup Firebase](docs/minggu-09/setup-firebase.md),
+[refleksi](docs/minggu-09/refleksi.md),
+[daftar periksa](docs/minggu-09/daftar-periksa.md),
+[bukti screenshot](docs/minggu-09/bukti/).
+
+Untuk mengulang uji login otomatis:
+
+```bash
+cd build/web && python -m http.server 8137 --bind 127.0.0.1
+# terminal lain:
+cd video && node scripts/uji-login-m9.js
+```
 
 ## Screenshot
 
@@ -82,12 +125,15 @@ Akun demo:
 
 ```
 lib/
-├── core/           # Theme, constants, utils (validators)
+├── core/           # Theme, constants, utils (validators, validasi_auth)
 ├── data/           # Models, repositories, mock data sources
-├── providers/      # State management (Provider)
+├── providers/      # State management (Provider) — auth_provider memakai Firebase Auth
 ├── screens/        # UI (auth, customer, admin)
+│   └── auth/       # masuk_daftar_page.dart, cek_status_login.dart
 ├── widgets/        # Reusable widgets
-└── router/         # GoRouter configuration
+├── router/         # GoRouter + go_router_refresh_stream.dart
+├── firebase_options.dart  # DefaultFirebaseOptions.currentPlatform (web)
+└── main.dart       # await Firebase.initializeApp sebelum runApp
 ```
 
 ### Halaman yang Dibangun (15 halaman)
@@ -108,8 +154,7 @@ lib/
 
 ### Form & Validasi
 
-- **Login**: email + password (validasi format, minimal 6 karakter)
-- **Register**: nama, email, password, konfirmasi password
+- **Masuk / Daftar** (satu halaman dua mode, Minggu 9): email + password (format email, minimal 6 karakter); mode Daftar menambah nama lengkap dan ulangi password. Pesan kesalahan Firebase tampil sebagai banner merah yang menetap.
 - **Checkout**: nama penerima, telepon, alamat (validasi wajib, format angka, minimal 10 karakter)
 - **Profil Kulit**: tipe kulit (ChoiceChip), concern (FilterChip), alergi (text)
 - **Form Produk**: nama, kategori (dropdown), harga, stok (angka), kandungan aktif, tipe kulit cocok, PAO (dropdown), manfaat, cara pakai
@@ -128,4 +173,5 @@ Semua form menggunakan:
 - [x] Fase 3 — Layar admin (Dashboard, Kelola Produk, Form Produk, Kelola Pesanan)
 - [x] Fase 4 — Responsive web (bottom nav mobile ↔ sidebar web)
 - [x] Fase 5 — Form validasi & state sederhana (Minggu 7)
-- [ ] Fase 6 — Firebase (Auth + Firestore)
+- [x] Fase 6a — **Firebase Authentication** (Minggu 9): daftar/masuk/keluar, auth gate, sesi, pesan kesalahan
+- [ ] Fase 6b — **Cloud Firestore** (Minggu 10): 5 collection `users`, `products`, `skin_profiles`, `orders`, `carts` + Security Rules
