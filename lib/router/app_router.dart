@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../data/models/product.dart';
+import 'go_router_refresh_stream.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/register_screen.dart';
 import '../screens/customer/beranda_screen.dart';
@@ -18,8 +20,26 @@ import '../screens/admin/form_produk_screen.dart';
 import '../screens/admin/kelola_pesanan_screen.dart';
 
 class AppRouter {
+  /// Halaman yang boleh dibuka tanpa login.
+  static const _halamanPublik = {'/login', '/register'};
+
   static final GoRouter router = GoRouter(
-        initialLocation: '/login',
+        initialLocation: '/beranda',
+        // Status login Firebase dipulihkan secara asynchronous setelah refresh.
+        // Listenable ini memaksa redirect dievaluasi ulang saat status berubah.
+        refreshListenable: GoRouterRefreshStream(
+          FirebaseAuth.instance.authStateChanges(),
+        ),
+        redirect: (context, state) {
+          final sudahMasuk = FirebaseAuth.instance.currentUser != null;
+          final diHalamanPublik = _halamanPublik.contains(state.matchedLocation);
+
+          // Otorisasi: seluruh halaman utama tertutup bagi yang belum masuk.
+          if (!sudahMasuk && !diHalamanPublik) return '/login';
+          // Sudah masuk tidak perlu melihat halaman Masuk/Daftar lagi.
+          if (sudahMasuk && diHalamanPublik) return '/beranda';
+          return null;
+        },
         routes: [
           GoRoute(
             path: '/login',

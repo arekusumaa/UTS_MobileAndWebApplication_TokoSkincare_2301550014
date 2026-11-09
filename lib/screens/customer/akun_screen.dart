@@ -37,8 +37,19 @@ class AkunScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final isWeb = width >= AppConstants.mobileBreakpoint;
 
-    final user = auth.currentUser!;
-    final initials = user.nama.split(' ').map((e) => e[0]).take(2).join().toUpperCase();
+    final user = auth.currentUser;
+    if (user == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    final initials = user.nama
+        .split(' ')
+        .where((e) => e.isNotEmpty)
+        .map((e) => e[0])
+        .take(2)
+        .join()
+        .toUpperCase();
 
     final content = SingleChildScrollView(
       padding: const EdgeInsets.all(AppConstants.margin),
@@ -129,9 +140,9 @@ class AkunScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: OutlinedButton.icon(
-              onPressed: () {
-                auth.logout();
-                context.go('/login');
+              onPressed: () async {
+                // Navigasi ke Halaman Masuk ditangani auth gate.
+                await auth.logout();
               },
               icon: const Icon(Icons.logout, color: AppColors.error),
               label: const Text('Keluar', style: TextStyle(color: AppColors.error)),

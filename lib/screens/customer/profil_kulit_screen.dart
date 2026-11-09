@@ -56,7 +56,7 @@ class _ProfilKulitScreenState extends State<ProfilKulitScreen> {
     final provider = context.read<SkinProfileProvider>();
 
     provider.saveProfile(
-      auth.currentUser!.id,
+      auth.currentUser?.id ?? '',
       SkinProfile(
         tipeKulit: _tipeKulit!,
         concern: _selectedConcerns.toList(),

@@ -6,8 +6,8 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
 import '../../providers/order_provider.dart';
 import '../../providers/product_provider.dart';
-import '../../providers/auth_provider.dart';
 import '../../data/models/order.dart';
+import '../../widgets/common/logout_button.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -27,15 +27,7 @@ class AdminDashboardScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard Admin'),
-        actions: [
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () {
-                context.read<AuthProvider>().logout();
-                context.go('/login');
-              },
-            ),
-        ],
+        actions: const [LogoutButton()],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppConstants.margin),

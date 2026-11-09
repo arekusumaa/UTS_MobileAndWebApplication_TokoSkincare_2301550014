@@ -11,6 +11,7 @@ import '../../data/models/product.dart';
 import '../../widgets/common/app_bottom_nav.dart';
 import '../../widgets/common/app_sidebar.dart';
 import '../../widgets/common/empty_state.dart';
+import '../../widgets/common/logout_button.dart';
 import '../../widgets/product/product_grid.dart';
 
 class BerandaScreen extends StatefulWidget {
@@ -26,7 +27,8 @@ class _BerandaScreenState extends State<BerandaScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final auth = context.read<AuthProvider>();
-      context.read<SkinProfileProvider>().loadProfile(auth.currentUser!.id);
+      context.read<SkinProfileProvider>()
+          .loadProfile(auth.currentUser?.id ?? '');
     });
   }
 
@@ -223,7 +225,10 @@ class _BerandaScreenState extends State<BerandaScreen> {
             AppSidebar(currentIndex: 0, onTap: (i) => _navigateTo(i)),
             Expanded(
               child: Scaffold(
-                appBar: AppBar(title: const Text('Beranda')),
+                appBar: AppBar(
+                  title: const Text('Beranda'),
+                  actions: const [LogoutButton()],
+                ),
                 body: content,
               ),
             ),
@@ -233,7 +238,10 @@ class _BerandaScreenState extends State<BerandaScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Beranda')),
+      appBar: AppBar(
+        title: const Text('Beranda'),
+        actions: const [LogoutButton()],
+      ),
       body: content,
       bottomNavigationBar: AppBottomNav(currentIndex: 0, onTap: (i) => _navigateTo(i)),
     );
