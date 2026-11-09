@@ -1,1 +1,18 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"toko-skincare-fec17","configurations":{"web":"1:310494488136:web:6da0010cec8bbfc0e79a7d"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "toko-skincare-fec17",
+          "configurations": {
+            "web": "1:310494488136:web:6da0010cec8bbfc0e79a7d"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

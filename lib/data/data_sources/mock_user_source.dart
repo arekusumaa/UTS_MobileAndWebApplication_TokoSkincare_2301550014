@@ -2,39 +2,21 @@ import '../models/app_user.dart';
 import '../repositories/user_repository.dart';
 import 'mock_data.dart';
 
+/// Padanan in-memory untuk widget test dan mode offline.
+/// Tidak menyimpan password — autentikasi sudah ditangani Firebase Auth.
 class MockUserSource implements UserRepository {
-  final List<AppUser> _users = List.from(MockData.users);
-  final Map<String, String> _passwords = {
-    for (final u in MockData.users) u.email: MockData.password,
+  final Map<String, AppUser> _users = {
+    for (final u in MockData.users) u.id: u,
   };
 
   @override
-  AppUser? login(String email, String password) {
-    if (_passwords[email] == password) {
-      try {
-        return _users.firstWhere((u) => u.email == email);
-      } catch (e) {
-        return null;
-      }
-    }
-    return null;
-  }
+  AppUser? getUserById(String uid) => _users[uid];
 
   @override
-  void register(AppUser user, String password) {
-    if (getUserByEmail(user.email) != null) {
-      throw Exception('Email sudah terdaftar');
-    }
-    _users.add(user);
-    _passwords[user.email] = password;
-  }
+  bool isAdmin(String uid) => _users[uid]?.isAdmin ?? false;
 
   @override
-  AppUser? getUserByEmail(String email) {
-    try {
-      return _users.firstWhere((u) => u.email == email);
-    } catch (e) {
-      return null;
-    }
+  Future<void> ensureProfile(AppUser user) async {
+    _users.putIfAbsent(user.id, () => user);
   }
 }

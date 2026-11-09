@@ -1,0 +1,159 @@
+rules_version = '2';
+
+// SkinCare Store — Aturan Keamanan Cloud Firestore (Minggu 10)
+// ---------------------------------------------------------------------------
+// Prinsip:
+//  1. Default DENY. Tidak ada `allow read, write: if true;`.
+//  2. Semua operasi wajib login (request.auth != null).
+//  3. Peran admin HANYA dari dokumen users/{uid}. Klien tidak bisa mengangkat
+//     dirinya sendiri: saat create, field role dipaksa 'pelanggan'.
+//  4. Data milik sendiri dibatasi dengan uid pada path dokumen.
+//  5. Query collection('orders') polos ditolak untuk pelanggan, sehingga UI
+//     wajib memakai where('uid', isEqualTo: uid) agar Rules dapat membuktikan
+//     bahwa setiap hasil query memang boleh dibaca.
+//
+// Catatan keterbatasan (dijelaskan di docs/minggu-10/keputusan-keamanan.md):
+// pelanggan diizinkan MENURUNKAN stok produk saat checkout, tetapi hanya field
+// `stok` (dan `updatedAt`) yang boleh berubah dan nilainya tidak boleh naik.
+// Pada produksi, pengurangan stok sebaiknya dipindah ke Cloud Functions /
+// transaksi server-side agar tidak bisa dipicu tanpa pesanan yang sah.
+// ---------------------------------------------------------------------------
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isMasuk() {
+      return request.auth != null;
+    }
+
+    function roleSaya() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isMasuk()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && roleSaya() == 'admin';
+    }
+
+    function milikSendiri(userId) {
+      return isMasuk() && userId == request.auth.uid;
+    }
+
+    function produkValid(d) {
+      return d.keys().hasOnly([
+          'id', 'nama', 'kategori', 'harga', 'stok',
+          'kandunganAktif', 'tipeKulitCocok', 'paoBulan',
+          'tanggalBuka', 'manfaat', 'caraPakai', 'imageUrl',
+          'createdAt', 'updatedAt'
+        ])
+        && d.nama is string && d.nama.size() > 0
+        && d.kategori is string
+        && d.harga is int && d.harga >= 0
+        && d.stok is int && d.stok >= 0
+        && d.kandunganAktif is list
+        && d.tipeKulitCocok is list
+        && d.paoBulan is int && d.paoBulan > 0;
+    }
+
+    function hanyaKurangiStok() {
+      return isMasuk()
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['stok', 'updatedAt'])
+        && request.resource.data.stok is int
+        && request.resource.data.stok >= 0
+        && request.resource.data.stok < resource.data.stok;
+    }
+
+    // ---------------------------------------------------------------- users
+    match /users/{userId} {
+      allow read: if milikSendiri(userId) || isAdmin();
+
+      // Dokumen dibuat otomatis oleh FirestoreDataSource saat login pertama.
+      // Role SELALU 'pelanggan'; promosi admin hanya lewat Firebase Console
+      // atau Admin SDK (melewati Rules).
+      allow create: if milikSendiri(userId)
+        && request.resource.data.uid == userId
+        && request.resource.data.role == 'pelanggan'
+        && request.resource.data.keys().hasOnly([
+            'uid', 'nama', 'email', 'role', 'createdAt'
+          ]);
+
+      // Admin boleh mengubah peran, tetapi tidak boleh mengganti uid.
+      allow update: if isAdmin()
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.role in ['admin', 'pelanggan'];
+
+      // Admin tidak boleh menghapus dokumennya sendiri (menjaga isAdmin()).
+      allow delete: if isAdmin() && userId != request.auth.uid;
+    }
+
+    // ------------------------------------------------------------- products
+    match /products/{productId} {
+      allow read: if isMasuk();
+      allow create: if isAdmin() && produkValid(request.resource.data);
+      allow update: if (isAdmin() && produkValid(request.resource.data))
+                    || hanyaKurangiStok();
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------- skin_profiles
+    match /skin_profiles/{userId} {
+      allow read: if milikSendiri(userId);
+      allow create, update: if milikSendiri(userId)
+        && request.resource.data.keys().hasOnly([
+            'tipeKulit', 'concern', 'alergi', 'updatedAt'
+          ])
+        && request.resource.data.tipeKulit is string
+        && request.resource.data.concern is list
+        && request.resource.data.alergi is list;
+      allow delete: if false;
+    }
+
+    // --------------------------------------------------------------- orders
+    match /orders/{orderId} {
+      // resource.data.uid cocok dengan where() yang dipakai pelanggan.
+      allow read: if isMasuk()
+                  && (resource.data.uid == request.auth.uid || isAdmin());
+
+      allow create: if isMasuk()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'menunggu'
+        && request.resource.data.total is int
+        && request.resource.data.total >= 0
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0
+        && request.resource.data.alamat is string
+        && request.resource.data.alamat.size() > 0
+        && request.resource.data.keys().hasOnly([
+            'uid', 'id', 'items', 'total', 'status', 'tanggal',
+            'alamat', 'namaPenerima', 'telepon', 'createdAt'
+          ]);
+
+      // Pelanggan TIDAK bisa mengubah status; hanya admin, dan hanya field
+      // status yang boleh berubah (uid/total/items terkunci).
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'updatedAt']);
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------- carts
+    // Sub-collection: carts/{uid}/items/{productId}
+    match /carts/{userId}/items/{itemId} {
+      allow read, delete: if milikSendiri(userId);
+      allow create, update: if milikSendiri(userId)
+        && request.resource.data.productId == itemId
+        && request.resource.data.quantity is int
+        && request.resource.data.quantity > 0
+        && request.resource.data.keys().hasOnly([
+            'productId', 'product', 'quantity', 'updatedAt'
+          ]);
+    }
+
+    // -------------------------------------------------------- default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
