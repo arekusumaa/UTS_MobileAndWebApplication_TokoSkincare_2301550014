@@ -1,0 +1,65 @@
+{
+  "tanggal": "2026-11-09T15:18:41.278Z",
+  "url": "http://127.0.0.1:8137/",
+  "sesuai": 8,
+  "total": 8,
+  "hasil": [
+    {
+      "no": 1,
+      "kasus": "Akses awal tanpa login",
+      "diharapkan": "Halaman Masuk tampil",
+      "nyata": "URL http://127.0.0.1:8137/#/login",
+      "status": "SESUI"
+    },
+    {
+      "no": 2,
+      "kasus": "Login admin",
+      "diharapkan": "Beranda tampil",
+      "nyata": "Sapaan 'Halo, ...' tampil",
+      "status": "SESUI"
+    },
+    {
+      "no": 3,
+      "kasus": "Role admin terbaca dari users/{uid}",
+      "diharapkan": "Badge Admin + menu Dashboard Admin",
+      "nyata": "Badge 'Admin' dan menu 'Dashboard Admin' tampil",
+      "status": "SESUI"
+    },
+    {
+      "no": 4,
+      "kasus": "Produk terbaca dari collection products",
+      "diharapkan": "Nama produk contoh tampil",
+      "nyata": "Produk 'Glow Cleanser Gel' tampil di Daftar Produk",
+      "status": "SESUI"
+    },
+    {
+      "no": 5,
+      "kasus": "Login pelanggan",
+      "diharapkan": "Beranda tampil",
+      "nyata": "Sapaan 'Halo, ...' tampil",
+      "status": "SESUI"
+    },
+    {
+      "no": 6,
+      "kasus": "Detail produk P01 dari Firestore",
+      "diharapkan": "Detail P01 tampil",
+      "nyata": "Detail 'Glow Cleanser Gel' tampil",
+      "status": "SESUI"
+    },
+    {
+      "no": 7,
+      "kasus": "Keranjang ditulis ke carts/{uid}/items",
+      "diharapkan": "Keranjang berisi minimal 1 item",
+      "nyata": "Semantics menampilkan 'Total (N item)' + tombol Checkout",
+      "status": "SESUI"
+    },
+    {
+      "no": 8,
+      "kasus": "Keranjang persisten setelah refresh",
+      "diharapkan": "Item tetap ada setelah F5",
+      "nyata": "Keranjang masih berisi item setelah refresh (bukan memori)",
+      "status": "SESUI"
+    }
+  ],
+  "consoleErrors": []
+}

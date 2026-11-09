@@ -1,0 +1,19 @@
+- :: Beranda Tab 1 of 4 | Produk Tab 2 of 4 | Keranjang Tab 3 of 4 | Akun T
+- :: Beranda Tab 1 of 4 | Produk Tab 2 of 4 | Keranjang Tab 3 of 4 | Akun T
+- :: Beranda Tab 1 of 4 | Produk Tab 2 of 4 | Keranjang Tab 3 of 4 | Akun T
+- :: Beranda Tab 1 of 4 | Produk Tab 2 of 4 | Keranjang Tab 3 of 4 | Akun T
+button :: Beranda Tab 1 of 4
+button :: Produk Tab 2 of 4
+button :: Keranjang Tab 3 of 4
+button :: Akun Tab 4 of 4
+- :: Keranjang
+- :: Hapus
+group :: Hapus
+- :: Hapus
+group :: Hapus
+button :: Hapus
+- :: Total (3 item)
+button :: Checkout
+group :: Lihat
+button :: Lihat
+- :: Rp 135.000

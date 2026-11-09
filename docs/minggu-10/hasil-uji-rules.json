@@ -1,0 +1,101 @@
+{
+  "tanggal": "2026-11-09T15:11:46.558375+00:00",
+  "project": "toko-skincare-fec17",
+  "admin_uid": "JRYpdzItPOcyCYHNI2plizDAyHg1",
+  "pelanggan_uid": "stjEG021jVXudJIN0uY57wdhoDq1",
+  "total": 13,
+  "sesuai": 13,
+  "hasil": [
+    {
+      "no": 1,
+      "kasus": "Anonim membaca products",
+      "diharapkan": "HTTP 403 — akses ditolak",
+      "aktual": "HTTP 403 — Missing or insufficient permissions.",
+      "status": "SESUI"
+    },
+    {
+      "no": 2,
+      "kasus": "Pelanggan membaca products",
+      "diharapkan": "HTTP 200 — diizinkan",
+      "aktual": "HTTP 200 — diizinkan",
+      "status": "SESUI"
+    },
+    {
+      "no": 3,
+      "kasus": "Pelanggan membuat produk baru",
+      "diharapkan": "HTTP 403 — akses ditolak",
+      "aktual": "HTTP 403 — Missing or insufficient permissions.",
+      "status": "SESUI"
+    },
+    {
+      "no": 4,
+      "kasus": "Pelanggan mengubah harga P01",
+      "diharapkan": "HTTP 403 — akses ditolak",
+      "aktual": "HTTP 403 — Missing or insufficient permissions.",
+      "status": "SESUI"
+    },
+    {
+      "no": 5,
+      "kasus": "Pelanggan menaikkan stok P01",
+      "diharapkan": "HTTP 403 — akses ditolak",
+      "aktual": "HTTP 403 — Missing or insufficient permissions.",
+      "status": "SESUI"
+    },
+    {
+      "no": 6,
+      "kasus": "Pelanggan mengubah role sendiri jadi admin",
+      "diharapkan": "HTTP 403 — akses ditolak",
+      "aktual": "HTTP 403 — Missing or insufficient permissions.",
+      "status": "SESUI"
+    },
+    {
+      "no": 7,
+      "kasus": "Pelanggan membaca carts milik admin",
+      "diharapkan": "HTTP 403 — akses ditolak",
+      "aktual": "HTTP 403 — Missing or insufficient permissions.",
+      "status": "SESUI"
+    },
+    {
+      "no": 8,
+      "kasus": "Pelanggan query semua orders tanpa filter uid",
+      "diharapkan": "HTTP 403 — akses ditolak",
+      "aktual": "HTTP 403 — Missing or insufficient permissions.",
+      "status": "SESUI"
+    },
+    {
+      "no": 9,
+      "kasus": "Pelanggan membuat order dengan uid orang lain",
+      "diharapkan": "HTTP 403 — akses ditolak",
+      "aktual": "HTTP 403 — Missing or insufficient permissions.",
+      "status": "SESUI"
+    },
+    {
+      "no": 10,
+      "kasus": "Admin membuat produk",
+      "diharapkan": "HTTP 200 — diizinkan",
+      "aktual": "HTTP 200 — diizinkan",
+      "status": "SESUI"
+    },
+    {
+      "no": 11,
+      "kasus": "Admin menghapus produk uji",
+      "diharapkan": "HTTP 200 — diizinkan",
+      "aktual": "HTTP 200 — diizinkan",
+      "status": "SESUI"
+    },
+    {
+      "no": 12,
+      "kasus": "Admin query semua orders",
+      "diharapkan": "HTTP 200 — diizinkan",
+      "aktual": "HTTP 200 — diizinkan",
+      "status": "SESUI"
+    },
+    {
+      "no": 13,
+      "kasus": "Admin membaca users/{uid} pelanggan",
+      "diharapkan": "HTTP 200 — diizinkan",
+      "aktual": "HTTP 200 — diizinkan",
+      "status": "SESUI"
+    }
+  ]
+}
