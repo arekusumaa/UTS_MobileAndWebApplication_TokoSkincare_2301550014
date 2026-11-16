@@ -9,16 +9,20 @@ Seluruh pengujian dilakukan terhadap **database sungguhan**
 
 | No | Pemeriksaan | Perintah | Hasil |
 | --- | --- | --- | --- |
-| 1 | Analisis statis | `flutter analyze` | **0 error, 0 warning**, 52 info (lint lama: `prefer_const`, depresiasi `withOpacity`) |
-| 2 | Unit test | `flutter test --no-pub` | **24/24 lulus** (13 validasi auth Minggu 9 + 11 konverter Firestore) |
+| 1 | Analisis statis | `flutter analyze` | **0 error, 0 warning**, 50 info (lint lama: `prefer_const`, depresiasi `withOpacity`) |
+| 2 | Unit + widget test | `flutter test --no-pub` | **50/50 lulus** |
 | 3 | Build release | `flutter build web --release` | **Berhasil** (`build/web`, Wasm dry run sukses) |
 | 4 | Kompilasi rules | `firebase deploy --only firestore:rules` | `rules file firestore.rules compiled successfully` |
 | 5 | Deploy index | `firebase deploy --only firestore:indexes` | `deployed indexes ... successfully` |
 
-Unit test konverter (`test/firestore_converters_test.dart`) mencakup 11 kasus:
-nama 5 collection, round-trip produk, `Timestamp` PAO, toleransi tipe `num`/ISO,
-role admin & fallback pelanggan, round-trip profil kulit, `productId` keranjang,
-dokumen keranjang rusak, `uid`/`items`/status pesanan, status tak dikenal.
+Rincian **50 test**:
+
+| Berkas test | Jumlah | Cakupan |
+| --- | --- | --- |
+| `test/validasi_auth_test.dart` | 13 | Validasi email/password & 10 terjemahan kode `FirebaseAuthException` (Minggu 9) |
+| `test/firestore_converters_test.dart` | 11 | Nama 5 collection, round-trip produk, `Timestamp` PAO, toleransi tipe `num`/ISO, role admin & fallback pelanggan, round-trip profil kulit, `productId` keranjang, dokumen keranjang rusak, `uid`/`items`/status pesanan, status tak dikenal |
+| `test/layanan_toko_test.dart` | 14 | `tandaKeranjang`, 5 aturan bisnis (kosong / stok / duplikat / selesai / valid), 4 stream realtime & error, 4 filter Dart tanpa composite index |
+| `test/widget_test.dart` | 12 | 4 keadaan `StreamKeadaan`, 4 `RiwayatPesananScreen` (kosong / ada data / realtime / error), 4 `DaftarProdukScreen` (waiting / 10 produk / pencarian / error) — semuanya dengan `LayananMemori`, tanpa koneksi Firebase |
 
 ---
 
@@ -88,46 +92,98 @@ REST (bagian 4).
 
 | Collection | Isi | Artinya |
 | --- | --- | --- |
-| `products` | 10 dokumen `P01`–`P10` | Auto-seed admin berhasil |
+| `products` | 10 dokumen `P01`–`P10` | Auto-seed admin berhasil, dibaca `.snapshots()` |
 | `users` | 2 dokumen | `role: admin` & `role: pelanggan` |
-| `carts/{pelanggan}/items` | `P01`, `quantity ≥ 1` | Keranjang benar-benar tersimpan, bukan cache lokal |
-| `skin_profiles` | 0 (belum diisi pada uji ini) | Kontrak & Rules sudah diuji lewat unit test |
-| `orders` | 0 (belum checkout pada uji ini) | Alur checkout sudah diuji pada video UTS |
+| `skin_profiles` | 1 dokumen | Dibuat lewat form Profil Kulit (kasus uji #1) |
+| `orders` | 3 dokumen | Dibuat lewat Checkout; semuanya `menunggu` saat dibuat lalu jadi `diproses` pada uji realtime #8 |
+| `carts` | sub-koleksi `carts/{pelanggan}/items/P01` | Keranjang persisten, bukan cache lokal |
 
-Konfirmasi langsung contoh dokumen keranjang:
+Ringkasan visual: [`bukti/19-isi-collection.png`](bukti/19-isi-collection.png)
+(dirakit dari respons REST API, bukan screenshot Console).
+
+Contoh dokumen `orders/{id}` hasil Create sungguhan:
 
 ```json
 {
-  "productId": "P01",
-  "quantity": 1,
-  "product": { "nama": "Glow Cleanser Gel", "harga": 45000, "...": "..." }
+  "uid": "stjEG021jVXudJIN0uY57wdhoDq1",
+  "id": "ORD-20261116-62942",
+  "status": "menunggu",
+  "total": 55000,
+  "items": [{
+    "productId": "P01", "quantity": 1,
+    "product": { "nama": "Glow Cleanser Gel", "harga": 45000, "...": "..." }
+  }],
+  "alamat": "Jl. Mawar No. 12, Jakarta Selatan",
+  "namaPenerima": "Rina Pratiwi",
+  "telepon": "081234567890"
 }
 ```
 
 ---
 
-## 5. Cara mengulang seluruh pengujian
+## 5. Tabel uji resmi modul — Create & Tampilkan Data (10 kasus)
+
+Ini adalah tabel **Latihan 4** modul: minimal 5 kasus dengan *harapan* dan
+*hasil nyata*. Dijalankan oleh `video/scripts/uji-modul-m10.js` pada aplikasi
+Flutter Web yang tersaji di `http://127.0.0.1:8137/`. Setiap kasus diverifikasi
+**dua kali**: dari UI (accessibility tree / URL / screenshot) **dan** dari server
+Firestore lewat REST API dengan token pemilik project, sehingga bukan sekadar
+klaim tampilan.
+
+Hasil mentah: [`bukti/hasil-uji-modul.json`](bukti/hasil-uji-modul.json).
+
+| No | Kasus uji | Harapan | Hasil nyata | Status |
+| --- | --- | --- | --- | --- |
+| 0 | Login pelanggan (prasyarat) | Beranda tampil | Sapaan `Halo, ...` tampil | SESUI |
+| 1 | **Create** `skin_profiles/{uid}` lewat form Profil Kulit | 1 dokumen baru, `tipeKulit='Berminyak'`, `concern=['Jerawat']` | HTTP 200 dari REST; field `tipeKulit` = `Berminyak`; chip kembali terpilih saat halaman dibuka ulang | SESUI |
+| 2 | **Read** `products` lewat `StreamBuilder` + `.snapshots()` | 10 produk tampil sesuai isi server | UI `10 produk ditemukan`; server punya 10 dokumen `P01`–`P10` | SESUI |
+| 3 | Validasi form Checkout **sebelum** Create | Form kosong ditolak, belum ada dokumen `orders` | Pesan `wajib diisi` / `minimal 10 karakter` muncul; jumlah `orders` tidak berubah | SESUI |
+| 4 | **Create** `orders/{orderId}` lewat tombol Buat Pesanan | 1 dokumen baru, `uid` = Rina, `status='menunggu'`, pindah ke Status Pesanan | `ORD-20261116-62942` tercatat dengan `uid=stjEG0…`, `status=menunggu`, `items=P01:1`, `total=55000` | SESUI |
+| 5 | **Read** `orders` lewat `.where('uid').snapshots()` | Pesanan baru tampil di Riwayat Pesanan tanpa refresh manual | `ORD-20261116-62942` terbaca dari stream realtime | SESUI |
+| 6 | **Aturan bisnis sebelum Create** — tolak pesanan identik yang masih `Menunggu` | Tidak ada dokumen baru, form tetap di Checkout, SnackBar penolakan tampil | `orders` tetap 3 dokumen, URL masih `#/checkout`, SnackBar merah "Pesanan dengan isi keranjang yang sama masih berstatus Menunggu…" | SESUI |
+| 7 | Persistensi setelah **refresh (F5)** | Order tetap tampil; sumber data server, bukan memori | `ORD-20261116-62942` masih ada setelah halaman dimuat ulang | SESUI |
+| 8 | **Realtime** — status diubah dari server | Label berubah `Menunggu → Diproses` tanpa reload | Label `Diproses` muncul ±4,5 detik setelah PATCH, tanpa refresh | SESUI |
+| 9 | **Isolasi pengguna** — akun admin membuka Riwayat Pesanan | Admin tidak melihat pesanan milik Rina | Riwayat admin menampilkan `Belum ada pesanan` walaupun `orders` berisi 3 dokumen | SESUI |
+
+**10/10 SESUI**, tanpa `console error` maupun `pageerror` di browser.
+
+Bukti screenshot: `bukti/10-profil-kulit-tersimpan.png` … `bukti/18-isolasi-pengguna.png`.
+
+> Catatan metodologis: skrip memilih produk yang stoknya cukup **dan** belum
+> punya pesanan `menunggu` dengan tanda keranjang `<id>:1`, lalu mengosongkan
+> keranjang sebagai fixture. Karena itu tabel di atas dapat diulang berkali-kali
+> tanpa gagal gara-gara aturan anti-duplikat itu sendiri.
+
+---
+
+## 6. Cara mengulang seluruh pengujian
 
 ```bash
-# 0. Pastikan rules aktif
+# 0. Pastikan rules aktif & token firebase-tools segar
+firebase firestore:databases:list --project toko-skincare-fec17
 firebase deploy --only firestore:rules,firestore:indexes --project toko-skincare-fec17
 
 # 1. Statis & unit
 flutter analyze
-NO_PROXY="localhost,127.0.0.1,::1" flutter test --no-pub
+NO_PROXY="localhost,127.0.0.1,::1" no_proxy="localhost,127.0.0.1,::1" flutter test --no-pub
 flutter build web --release
 
 # 2. Rules (langsung ke server)
 python scripts/uji_rules.py
 
-# 3. Integrasi UI (terminal A)
+# 3. Sajikan build (terminal A)
 python -m http.server 8137 --directory build/web --bind 127.0.0.1
-#    Integrasi UI (terminal B)
-cd video && NO_PROXY="127.0.0.1,localhost" node scripts/uji-firestore-m10.js
 
-# 4. Rekam isi database
+# 4. Integrasi UI (terminal B)
+cd video && NO_PROXY="127.0.0.1,localhost" node scripts/uji-firestore-m10.js   # 8/8
+cd video && NO_PROXY="127.0.0.1,localhost" node scripts/uji-modul-m10.js      # 10/10
+cd video && NO_PROXY="127.0.0.1,localhost" node scripts/buat-bukti-data.js    # gambar isi collection
+
+# 5. Rekam isi database
 python scripts/verifikasi_data.py
 ```
 
 `NO_PROXY` diperlukan karena lingkungan ini memiliki proxy yang mengganggu
-akses ke `localhost` saat `flutter test`.
+akses ke `localhost` saat `flutter test`. Token `firebase-tools` dapat
+kedaluwarsa; menjalankan satu perintah CLI terautentikasi akan
+memperbaruinya secara otomatis.

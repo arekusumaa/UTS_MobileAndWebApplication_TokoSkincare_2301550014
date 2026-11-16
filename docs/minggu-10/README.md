@@ -1,4 +1,4 @@
-# Minggu 10 — Cloud Firestore & Security Rules
+# Minggu 10 — Cloud Firestore: Collection, Tambah & Tampilkan Data
 
 **Nama:** Are Kusuma Pratiwi
 **NIM:** 23.01.55.0014 · **Kelas:** A1 / A2DLC
@@ -27,19 +27,42 @@ simulasi (`Mock*Source`) dengan **Cloud Firestore** sungguhan, lalu memasang
 > pengembangan lanjutan, bukan syarat UTS. Mode simulasi tetap tersedia lewat
 > `--dart-define=PAKAI_MOCK=true`.
 
+### Pembaruan sesuai modul resmi
+
+Setelah `modul-minggu-10-firestore.docx`, `materi-ajar-minggu-10-firestore.pptx`,
+dan video panduan dibaca, lapisan **Create & Read** ditambahkan agar benar-benar
+mengikuti bentuk yang diminta modul:
+
+| Butir modul | Implementasi |
+| --- | --- |
+| `lib/services/layanan_firestore.dart` | `LayananToko` + `LayananFirestore` (`.snapshots()`) + `LayananMemori` (widget test) |
+| `StreamBuilder` tiga keadaan | `StreamKeadaan<T>` dipakai Beranda & Riwayat Pesanan; Daftar Produk pakai `StreamBuilder` langsung |
+| Aturan bisnis sebelum Create | `cekAturanPesanan()` — cek stok dari server + tolak pesanan identik yang masih `Menunggu` |
+| Create & Read saja | `skin_profiles` dan `orders` diisi lewat form; tidak ada tombol Edit/Delete baru |
+| Tabel uji ≥5 kasus | **10 kasus, 10/10 SESUI** di [`tabel-uji.md`](tabel-uji.md) bagian 5 |
+
+Pemetaan lengkap butir modul ada di [`modul-resmi.md`](modul-resmi.md).
+
+**Ringkasan verifikasi terakhir:** `flutter analyze` 0 error/0 warning ·
+`flutter test` **50/50** · `flutter build web --release` berhasil ·
+uji Rules **13/13** · integrasi migrasi **8/8** · integrasi modul resmi
+**10/10 SESUI**, tanpa console error.
+
 ---
 
 ## Daftar isi berkas
 
 | Berkas | Isi |
 | --- | --- |
+| [`modul-resmi.md`](modul-resmi.md) | **Pemetaan butir modul resmi** (DOCX/PPTX/video) → implementasi, Create/Read, 3 keadaan stream, bukti |
 | [`setup-firestore.md`](setup-firestore.md) | Langkah mengaktifkan API, membuat database, deploy rules, menaikkan admin |
 | [`struktur-database.md`](struktur-database.md) | Skema 5 collection + contoh dokumen |
 | [`keputusan-keamanan.md`](keputusan-keamanan.md) | Alasan tiap aturan, matriks akses, batasan yang disadari |
 | [`perubahan-kode.md`](perubahan-kode.md) | Arsitektur cache + snapshot, suntikan dependensi, daftar file |
-| [`tabel-uji.md`](tabel-uji.md) | Unit test, analisis statis, build, dan uji integrasi Chrome |
-| [`refleksi.md`](refleksi.md) | Refleksi pengerjaan |
-| [`daftar-periksa.md`](daftar-periksa.md) | Checklist Definition of Done |
+| [`tabel-uji.md`](tabel-uji.md) | 50 unit/widget test, 13 uji Rules, 8 + 10 uji integrasi Chrome, tabel 10 kasus resmi |
+| [`refleksi.md`](refleksi.md) | Refleksi pengerjaan + **jawaban 3 pertanyaan refleksi modul** |
+| [`daftar-periksa.md`](daftar-periksa.md) | Checklist 44 butir Definition of Done |
+| [`isi-firestore.json`](isi-firestore.json), [`bukti/`](bukti/) | Isi database & 16 screenshot aplikasi + 1 gambar isi collection |
 
 ---
 
@@ -80,17 +103,30 @@ mengisi ulang data.
 ## Alur data singkat
 
 ```
-UI (15 halaman, tidak diubah)
-   ↓  context.watch / context.read
-Provider (Product / Cart / Order / SkinProfile / Auth)
-   ↓  kontrak repository SINKRON
-AppRepositories  ── firestore() ──▶ FirestoreDataSource
-   │                                   ├── cache lokal (List/Map)
-   │                                   ├── snapshots() realtime (5 collection)
-   │                                   └── write async + optimistic update
-   └── mock() ──▶ Mock*Source (untuk test & UTS)
-                        ↑
-                   DataSync.berubah() → notifyListeners() → UI segar
+┌─ Jalur A: lapisan modul resmi (Create & Read, StreamBuilder) ──────────┐
+│  Beranda / Daftar Produk / Riwayat Pesanan / Checkout                   │
+│       ↓ context.read<LayananToko>() atau parameter `layanan`             │
+│  LayananFirestore ── products.snapshots(), orders.where(uid), users/{uid}│
+│  LayananMemori    ── versi tanpa Firebase untuk 12 widget test           │
+│  cekAturanPesanan() → tambahPesanan() → orders/{id}                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌─ Jalur B: lapisan migrasi (kontrak repository sinkron) ────────────────┐
+│  Provider (Product / Cart / Order / SkinProfile / Auth)                 │
+│       ↓                                                                 │
+│  AppRepositories ── firestore() ──▶ FirestoreDataSource                 │
+│       │                              ├── cache lokal (List/Map)          │
+│       │                              ├── snapshots() 5 collection        │
+│       │                              └── write async + optimistic update │
+│       └── mock() ──▶ Mock*Source (UTS / test)                            │
+│                        ↑                                                 │
+│                   DataSync.berubah() → notifyListeners() → UI segar       │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
-Detail ada di [`perubahan-kode.md`](perubahan-kode.md).
+Dua jalur sengaja hidup berdampingan: **Jalur B** menjaga 15 halaman Minggu 6/7
+tetap utuh tanpa menulis ulang kontrak menjadi `Future`/`Stream`, sedangkan
+**Jalur A** memenuhi ketentuan modul bahwa pembacaan realtime harus memakai
+`StreamBuilder` + `.snapshots()` dan UI tidak boleh menyentuh Firestore langsung.
+Detail ada di [`perubahan-kode.md`](perubahan-kode.md) dan
+[`modul-resmi.md`](modul-resmi.md).

@@ -124,7 +124,7 @@ cd build/web && python -m http.server 8137 --bind 127.0.0.1
 cd video && node scripts/uji-login-m9.js
 ```
 
-## Minggu 10 — Cloud Firestore & Security Rules
+## Minggu 10 — Cloud Firestore: Collection, Tambah & Tampilkan Data
 
 Branch `minggu-10-firestore` mengganti `MockDataSource` dengan
 `FirestoreDataSource` untuk **5 collection**: `users`, `products`,
@@ -135,24 +135,34 @@ Branch `minggu-10-firestore` mengganti `MockDataSource` dengan
 |---|---|
 | Arsitektur | Cache lokal + listener `snapshots()` realtime + optimistic write — **15 halaman UI tidak diubah** |
 | Dependency injection | `lib/data/app_repositories.dart` → `firestore()` / `mock()` / `custom()`; `DataSync` menyegarkan semua Provider |
+| **Lapisan modul resmi** | `lib/services/layanan_firestore.dart` → `LayananToko` / `LayananFirestore` / `LayananMemori`; `StreamBuilder` + `.snapshots()` di Beranda, Daftar Produk, Riwayat Pesanan |
+| **Create & Read** | Form Profil Kulit → `skin_profiles/{uid}`; Checkout → `orders/{id}`; hanya Create/Read, Update/Delete menyusul Minggu 11 |
+| **Aturan bisnis** | `cekAturanPesanan()` menolak stok kurang & pesanan identik yang masih `Menunggu` sebelum dokumen ditulis |
 | Keamanan | [`firestore.rules`](firestore.rules): default-deny, wajib login, isolasi per `uid`, validasi bentuk dokumen, `role` hanya bisa diubah admin |
 | Admin | `python scripts/promote_admin.py` menaikkan peran lewat kredensial pemilik project (klien tidak bisa mengangkat diri sendiri) |
 | Seed | Login admin pertama mengisi 10 produk contoh bila `products` kosong |
 | Mode simulasi | `--dart-define=PAKAI_MOCK=true` tetap tersedia untuk UTS |
 
-**Verifikasi**: `flutter analyze` 0 error/0 warning · `flutter test` **24/24** ·
+**Verifikasi**: `flutter analyze` 0 error/0 warning · `flutter test` **50/50** ·
 `flutter build web --release` berhasil · **uji Rules 13/13 SESUI** ·
-**uji integrasi Chrome 8/8 SESUI** (termasuk keranjang tetap ada setelah refresh).
+**uji integrasi Chrome 8/8 + 10/10 SESUI** (10 kasus resmi modul: Create
+`skin_profiles`/`orders`, Read realtime, penolakan duplikat, persistensi F5,
+isolasi pengguna; 0 console error).
 
-Dokumentasi lengkap: [README Minggu 10](docs/minggu-10/README.md),
+Dokumentasi lengkap: [pemetaan modul resmi](docs/minggu-10/modul-resmi.md),
+[README Minggu 10](docs/minggu-10/README.md),
 [setup Firestore](docs/minggu-10/setup-firestore.md),
 [struktur database](docs/minggu-10/struktur-database.md),
 [keputusan keamanan](docs/minggu-10/keputusan-keamanan.md),
 [perubahan kode](docs/minggu-10/perubahan-kode.md),
-[tabel uji](docs/minggu-10/tabel-uji.md),
+[tabel uji 10 kasus](docs/minggu-10/tabel-uji.md),
 [refleksi](docs/minggu-10/refleksi.md),
 [daftar periksa](docs/minggu-10/daftar-periksa.md),
 [bukti](docs/minggu-10/bukti/).
+
+> Yang masih manual: 2 screenshot **Firebase Console** (Data + Rules) karena
+> memerlukan login Google mahasiswa. `bukti/19-isi-collection.png` dirakit dari
+> Firestore REST API dan **bukan** screenshot Console.
 
 ## Screenshot
 
@@ -171,18 +181,20 @@ lib/
 ├── core/           # Theme, constants, utils (validators, validasi_auth)
 ├── data/           # Models, repositories, data sources (mock + firestore), app_repositories.dart
 ├── providers/      # State management (Provider) — disuntikkan dari AppRepositories
+├── services/       # layanan_firestore.dart (LayananToko / Firestore / Memori)
 ├── screens/        # UI (auth, customer, admin)
 │   └── auth/       # masuk_daftar_page.dart, cek_status_login.dart
-├── widgets/        # Reusable widgets
+├── widgets/        # Reusable widgets (termasuk stream_keadaan.dart)
 ├── router/         # GoRouter + go_router_refresh_stream.dart
 ├── firebase_options.dart  # DefaultFirebaseOptions.currentPlatform (web)
-└── main.dart              # Firebase.initializeApp + AppRepositories + MultiProvider
+└── main.dart              # Firebase.initializeApp + AppRepositories + LayananToko + MultiProvider
 
 (root project)
 ├── firestore.rules        # Aturan keamanan Firestore
 ├── firestore.indexes.json # Daftar index (kosong)
 ├── firebase.json          # Konfigurasi FlutterFire + referensi rules
-└── scripts/               # promote_admin.py, uji_rules.py, verifikasi_data.py
+├── scripts/               # promote_admin.py, uji_rules.py, verifikasi_data.py
+└── video/scripts/         # uji-firestore-m10.js, uji-modul-m10.js, buat-bukti-data.js
 ```
 
 ### Halaman yang Dibangun (15 halaman)
