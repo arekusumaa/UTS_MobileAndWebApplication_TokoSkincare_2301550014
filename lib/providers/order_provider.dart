@@ -33,7 +33,13 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createOrder({
+  /// Susun objek [Order] tanpa menulis ke mana pun.
+  ///
+  /// Minggu 10: penulisan dokumen `orders/{id}` dilakukan oleh
+  /// `LayananToko.tambahPesanan()` setelah aturan bisnis lolos. Memisahkan
+  /// "susun" dan "tulis" membuat form Checkout bisa menolak pesanan lebih
+  /// dulu tanpa meninggalkan dokumen setengah jadi.
+  Order buatOrder({
     required List<CartItem> items,
     required int total,
     required String alamat,
@@ -46,7 +52,7 @@ class OrderProvider extends ChangeNotifier {
     final orderId =
         'ORD-${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}-${now.millisecondsSinceEpoch.toString().substring(8)}';
 
-    final order = Order(
+    return Order(
       id: orderId,
       items: List.from(items),
       total: total,
@@ -56,7 +62,32 @@ class OrderProvider extends ChangeNotifier {
       namaPenerima: namaPenerima,
       telepon: telepon,
     );
+  }
 
+  /// Catat pesanan ke state lokal setelah dokumen berhasil ditulis layanan.
+  /// Tidak menulis ulang ke repository (mencegah duplikasi `set()`).
+  void catatPesananLokal(Order order) {
+    _orders.removeWhere((o) => o.id == order.id);
+    _orders.insert(0, order);
+    _lastOrder = order;
+    notifyListeners();
+  }
+
+  /// Jalur lama (kompatibel untuk kode lain / uji): susun lalu tulis.
+  void createOrder({
+    required List<CartItem> items,
+    required int total,
+    required String alamat,
+    String? namaPenerima,
+    String? telepon,
+  }) {
+    final order = buatOrder(
+      items: items,
+      total: total,
+      alamat: alamat,
+      namaPenerima: namaPenerima,
+      telepon: telepon,
+    );
     _orderSource.createOrder(order);
     _orders = _orderSource.getAllOrders();
     _lastOrder = order;

@@ -4,24 +4,41 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/utils/filter_produk.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/product_provider.dart';
 import '../../providers/skin_profile_provider.dart';
+import '../../data/models/app_user.dart';
 import '../../data/models/product.dart';
+import '../../services/layanan_firestore.dart';
 import '../../widgets/common/app_bottom_nav.dart';
 import '../../widgets/common/app_sidebar.dart';
-import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/logout_button.dart';
+import '../../widgets/common/stream_keadaan.dart';
 import '../../widgets/product/product_grid.dart';
 
 class BerandaScreen extends StatefulWidget {
-  const BerandaScreen({super.key});
+  const BerandaScreen({super.key, this.layanan});
+
+  /// Injeksi untuk widget test: `LayananMemori()` tanpa koneksi Firebase.
+  final LayananToko? layanan;
 
   @override
   State<BerandaScreen> createState() => _BerandaScreenState();
 }
 
 class _BerandaScreenState extends State<BerandaScreen> {
+  Stream<AppUser?>? _streamProfil;
+  Stream<List<Product>>? _streamProduk;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final service = widget.layanan ?? context.read<LayananToko>();
+    _streamProfil ??= service.streamProfilSaya();
+    _streamProduk ??= service.streamDaftarProduk();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -51,21 +68,26 @@ class _BerandaScreenState extends State<BerandaScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
-    final productProvider = context.watch<ProductProvider>();
     final skinProfile = context.watch<SkinProfileProvider>();
     final width = MediaQuery.of(context).size.width;
     final isWeb = width >= AppConstants.mobileBreakpoint;
 
     final userName = auth.currentUser?.nama ?? 'Pengguna';
-    final rekomendasi = productProvider.getRekomendasi(skinProfile.profile.tipeKulit);
 
     final content = SingleChildScrollView(
       padding: const EdgeInsets.all(AppConstants.margin),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Greeting
-          Text('Halo, $userName!', style: AppTextStyles.judul),
+          // Sapaan realtime dari users/{uid} (modul Minggu 10, slide 10/16).
+          // Profil yang diubah di Console langsung terbaca tanpa login ulang.
+          StreamBuilder<AppUser?>(
+            stream: _streamProfil,
+            builder: (context, snapshot) => Text(
+              'Halo, ${snapshot.data?.nama ?? userName}!',
+              style: AppTextStyles.judul,
+            ),
+          ),
           const SizedBox(height: 4),
           Text('Temukan skincare terbaik untuk kulitmu', style: AppTextStyles.keterangan),
           const SizedBox(height: 20),
@@ -201,19 +223,23 @@ class _BerandaScreenState extends State<BerandaScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          if (rekomendasi.isEmpty)
-            EmptyState(
-              title: 'Belum ada rekomendasi',
-              message: 'Lengkapi profil kulit untuk rekomendasi yang lebih akurat',
-              icon: Icons.recommend_outlined,
-              buttonText: 'Lihat Semua Produk',
-              onButtonPressed: () => context.go('/produk'),
-            )
-          else
-            ProductGrid(
-              products: rekomendasi,
+          // Daftar rekomendasi dibaca langsung dari `products.snapshots()`.
+          // Tiga keadaan StreamBuilder (loading / error / kosong) ditangani
+          // StreamKeadaan; filter tipe kulit dihitung di sisi Dart.
+          StreamKeadaan<List<Product>>(
+            stream: _streamProduk ?? Stream.value(const <Product>[]),
+            isEmpty: (daftar) => daftar.isEmpty,
+            judulKosong: 'Belum ada produk',
+            pesanKosong: 'Produk akan tampil setelah admin menambahkannya',
+            ikonKosong: Icons.recommend_outlined,
+            builder: (context, daftar) => ProductGrid(
+              products: rekomendasiDariStream(
+                daftar,
+                skinProfile.profile.tipeKulit,
+              ),
               onTap: (p) => context.go('/produk/${p.id}'),
             ),
+          ),
         ],
       ),
     );

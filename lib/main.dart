@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'data/app_repositories.dart';
 import 'firebase_options.dart';
+import 'services/layanan_firestore.dart';
 import 'providers/auth_provider.dart';
 import 'providers/product_provider.dart';
 import 'providers/cart_provider.dart';
@@ -32,18 +33,33 @@ Future<void> main() async {
   // jangan sampai macet bila jaringan / Firestore sedang bermasalah.
   repos.initialize();
 
-  runApp(SkinCareStoreApp(repos: repos));
+  // Lapisan layanan dipisah dari UI (modul Minggu 10, slide 9). Mode simulasi
+  // memakai LayananMemori sehingga widget test tidak menyentuh Firebase.
+  final LayananToko layanan = pakaiMock
+      ? LayananMemori()
+      : LayananFirestore();
+
+  runApp(SkinCareStoreApp(repos: repos, layanan: layanan));
 }
 
 class SkinCareStoreApp extends StatelessWidget {
-  const SkinCareStoreApp({super.key, required this.repos});
+  const SkinCareStoreApp({
+    super.key,
+    required this.repos,
+    required this.layanan,
+  });
 
   final AppRepositories repos;
+  final LayananToko layanan;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        // Suntikkan lewat Provider (bukan ChangeNotifierProvider): layanan
+        // hanya menyediakan Stream/Future, bukan state yang berubah sendiri.
+        // Widget test cukup mengganti nilainya dengan LayananMemori().
+        Provider<LayananToko>.value(value: layanan),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(
             userRepository: repos.users,

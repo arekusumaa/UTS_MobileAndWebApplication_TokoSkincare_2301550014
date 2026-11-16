@@ -10,13 +10,17 @@ import '../../providers/auth_provider.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/order_provider.dart';
 import '../../providers/product_provider.dart';
+import '../../services/layanan_firestore.dart';
 import '../../widgets/common/custom_button.dart';
 import '../../widgets/cart/order_summary.dart';
 
 enum PaymentMethod { transferBank, cod, ewallet }
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({super.key});
+  const CheckoutScreen({super.key, this.layanan});
+
+  /// Injeksi untuk widget test: `LayananMemori()` tanpa koneksi Firebase.
+  final LayananToko? layanan;
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -28,6 +32,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final _teleponController = TextEditingController();
   final _alamatController = TextEditingController();
   PaymentMethod _payment = PaymentMethod.transferBank;
+  bool _menyimpan = false;
 
   @override
   void initState() {
@@ -44,35 +49,75 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     super.dispose();
   }
 
-  void _handleCheckout() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final cart = context.read<CartProvider>();
-      final orderProvider = context.read<OrderProvider>();
-      final productProvider = context.read<ProductProvider>();
+  /// Alur Create Minggu 10 (padanan Form Reservasi pada modul):
+  /// validasi lokal → cek aturan bisnis ke Firestore → tulis dokumen.
+  /// Bila ditolak, SnackBar muncul dan **form tetap terbuka** tanpa dokumen
+  /// baru. Tombol dinonaktifkan selama proses agar tidak dobel submit.
+  Future<void> _handleCheckout() async {
+    if (_menyimpan) return;
+    if (!(_formKey.currentState?.validate() ?? false)) return;
 
-      orderProvider.createOrder(
+    setState(() => _menyimpan = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final layanan = widget.layanan ?? context.read<LayananToko>();
+    final cart = context.read<CartProvider>();
+
+    try {
+      // 1. Aturan bisnis: stok cukup + tidak ada pesanan identik menunggu.
+      final penolakan = await layanan.cekAturanPesanan(cart.items);
+      if (!mounted) return;
+      if (penolakan != null) {
+        setState(() => _menyimpan = false);
+        messenger.hideCurrentSnackBar();
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(penolakan),
+            backgroundColor: AppColors.error,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+        return; // dokumen TIDAK ditulis, form tidak ditutup
+      }
+
+      // 2. Susun pesanan, lalu tulis ke collection `orders`.
+      final orderProvider = context.read<OrderProvider>();
+      final order = orderProvider.buatOrder(
         items: cart.items,
         total: cart.totalHarga + 10000,
         alamat: _alamatController.text.trim(),
         namaPenerima: _namaController.text.trim(),
         telepon: _teleponController.text.trim(),
       );
+      await layanan.tambahPesanan(order);
+      if (!mounted) return;
 
-      // Reduce stock
+      // 3. Optimistic update: UI langsung merespons, listener `.snapshots()`
+      //    kemudian menyamakan state dengan server.
+      orderProvider.catatPesananLokal(order);
+      final productProvider = context.read<ProductProvider>();
       for (final item in cart.items) {
         productProvider.reduceStok(item.product.id, item.quantity);
       }
-
       cart.clearCart();
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Pesanan berhasil dibuat! Status: Menunggu')),
-        );
-      }
-
+      messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(
+        const SnackBar(
+            content: Text('Pesanan berhasil dibuat! Status: Menunggu')),
+      );
+      setState(() => _menyimpan = false);
       context.go('/status-pesanan');
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _menyimpan = false);
+      messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('Pesanan gagal disimpan: $e'),
+          backgroundColor: AppColors.error,
+          duration: const Duration(seconds: 5),
+        ),
+      );
     }
   }
 
@@ -197,9 +242,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
         child: SafeArea(
           child: CustomButton(
-            label: 'Buat Pesanan',
+            label: _menyimpan ? 'Menyimpan...' : 'Buat Pesanan',
             icon: Icons.check_circle_outline,
-            onPressed: _handleCheckout,
+            isLoading: _menyimpan,
+            onPressed: _menyimpan ? null : () => _handleCheckout(),
           ),
         ),
       ),
