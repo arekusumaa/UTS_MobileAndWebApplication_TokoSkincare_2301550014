@@ -1,0 +1,18 @@
+- :: Checkout | Alamat Pengiriman | Metode Pembayaran (Simulasi) | Ringkasa
+- :: Checkout | Alamat Pengiriman | Metode Pembayaran (Simulasi) | Ringkasa
+- :: Checkout | Alamat Pengiriman | Metode Pembayaran (Simulasi) | Ringkasa
+- :: Checkout
+group :: Alamat Pengiriman | Metode Pembayaran (Simulasi) | Ringkasan Pesanan |
+- :: Alamat Pengiriman
+- :: Metode Pembayaran (Simulasi)
+- :: Ringkasan Pesanan
+- :: Glow Cleanser Gel x1
+- :: Rp 45.000
+- :: Subtotal
+- :: Rp 45.000
+- :: Ongkos Kirim
+- :: Total
+- :: Rp 10.000
+- :: Rp 55.000
+- :: Pesanan dengan isi keranjang yang sama masih berstatus Menunggu. Tungg
+button :: Buat Pesanan

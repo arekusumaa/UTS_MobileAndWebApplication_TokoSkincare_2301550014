@@ -1,0 +1,85 @@
+{
+  "tanggal": "2026-11-16T05:07:10.870Z",
+  "url": "http://127.0.0.1:8137/",
+  "modul": "Minggu 10 — Cloud Firestore: Collection, Tambah & Tampilkan Data",
+  "produkUji": {
+    "id": "P01",
+    "nama": "Glow Cleanser Gel"
+  },
+  "orderUji": "ORD-20261116-62942",
+  "sesuai": 10,
+  "total": 10,
+  "hasil": [
+    {
+      "no": 0,
+      "kasus": "Login pelanggan (prasyarat)",
+      "diharapkan": "Beranda tampil",
+      "nyata": "Sapaan 'Halo, ...' tampil",
+      "status": "SESUI"
+    },
+    {
+      "no": 1,
+      "kasus": "Create skin_profiles/{uid} dari form Profil Kulit",
+      "diharapkan": "Dokumen baru dengan tipeKulit='Berminyak'",
+      "nyata": "HTTP 200 — tipeKulit='Berminyak', concern & alergi tersimpan",
+      "status": "SESUI"
+    },
+    {
+      "no": 2,
+      "kasus": "Read collection products lewat StreamBuilder .snapshots()",
+      "diharapkan": "10 produk tampil dari server",
+      "nyata": "UI menampilkan '10 produk ditemukan'; server punya 10 dokumen",
+      "status": "SESUI"
+    },
+    {
+      "no": 3,
+      "kasus": "Validasi form berjalan SEBELUM dokumen orders ditulis",
+      "diharapkan": "Pesan 'wajib diisi' / 'minimal 10 karakter' muncul, belum ada dokumen",
+      "nyata": "Validator menolak form kosong; tidak ada dokumen baru",
+      "status": "SESUI"
+    },
+    {
+      "no": 4,
+      "kasus": "Create orders/{orderId} lewat tombol Buat Pesanan",
+      "diharapkan": "1 dokumen baru, uid=Rina, status='menunggu', pindah ke Status Pesanan",
+      "nyata": "Dokumen ORD-20261116-62942 (uid=stjEG021jVXudJIN0uY57wdhoDq1, status=menunggu, items=P01:1)",
+      "status": "SESUI"
+    },
+    {
+      "no": 5,
+      "kasus": "Read orders lewat where('uid').snapshots() di Riwayat Pesanan",
+      "diharapkan": "Pesanan baru tampil tanpa refreshManual",
+      "nyata": "Order ORD-20261116-62942 terbaca dari stream realtime",
+      "status": "SESUI"
+    },
+    {
+      "no": 6,
+      "kasus": "Aturan bisnis menolak pesanan identik yang masih Menunggu",
+      "diharapkan": "Tidak ada dokumen baru; form tetap di Checkout; SnackBar penolakan tampil",
+      "nyata": "orders tetap 3 dokumen, URL masih checkout, pesan penolakan tampil",
+      "status": "SESUI"
+    },
+    {
+      "no": 7,
+      "kasus": "Data pesanan tetap ada setelah refresh (F5)",
+      "diharapkan": "Order yang sama masih tampil; sumbernya server, bukan memori",
+      "nyata": "Order ORD-20261116-62942 masih ada setelah halaman dimuat ulang",
+      "status": "SESUI"
+    },
+    {
+      "no": 8,
+      "kasus": "Perubahan dokumen di server langsung tampil (realtime)",
+      "diharapkan": "Label status berubah jadi 'Diproses' tanpa reload",
+      "nyata": "Status berubah Menunggu → Diproses tanpa refresh halaman",
+      "status": "SESUI"
+    },
+    {
+      "no": 9,
+      "kasus": "Isolasi pengguna: akun admin tidak melihat pesanan Rina",
+      "diharapkan": "Riwayat admin kosong walaupun collection orders berisi pesanan Rina",
+      "nyata": "Riwayat admin menampilkan 'Belum ada pesanan' (filter uid bekerja)",
+      "status": "SESUI"
+    }
+  ],
+  "consoleErrors": []
+}

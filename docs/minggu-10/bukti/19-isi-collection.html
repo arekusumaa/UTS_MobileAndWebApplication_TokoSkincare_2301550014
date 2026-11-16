@@ -1,0 +1,99 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+    *{box-sizing:border-box}
+    body{margin:0;padding:32px 40px;background:#faf7f8;color:#2b2230;
+         font-family:Arial,Helvetica,sans-serif}
+    h1{margin:0 0 4px;font-size:26px;color:#D95778}
+    .sub{font-size:13px;color:#7a6b73;margin-bottom:6px}
+    .note{font-size:12px;color:#8a5a68;background:#fff0f4;border:1px solid #f5c9d6;
+          padding:10px 14px;border-radius:8px;margin:14px 0 20px}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .card{background:#fff;border:1px solid #ece2e7;border-radius:12px;padding:16px;
+          box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .card-head{display:flex;align-items:center;gap:9px;font-size:16px;margin-bottom:12px}
+    .dot{width:10px;height:10px;border-radius:50%;background:#D95778;display:inline-block}
+    .count{margin-left:auto;font-size:12px;color:#fff;background:#D95778;
+           padding:3px 9px;border-radius:20px}
+    .chips{display:flex;flex-wrap:wrap;gap:6px}
+    code{font-size:11px;background:#f7f1f4;border:1px solid #eee0e7;
+         padding:3px 7px;border-radius:5px;color:#5c4552}
+    .muted{font-size:12px;color:#9a8b93}
+    table{width:100%;border-collapse:collapse;margin-top:20px;font-size:12px;
+          background:#fff;border-radius:10px;overflow:hidden}
+    th{background:#D95778;color:#fff;text-align:left;padding:9px 12px;font-size:12px}
+    td{padding:8px 12px;border-bottom:1px solid #f1e9ed}
+    .badge{background:#fff0f4;color:#D95778;padding:2px 8px;border-radius:12px;font-size:11px}
+    h2{font-size:16px;margin:26px 0 0;color:#4a3842}
+    .foot{margin-top:22px;font-size:11px;color:#9a8b93}
+  </style></head><body>
+    <h1>Cloud Firestore — Isi Collection</h1>
+    <div class="sub">Project <b>toko-skincare-fec17</b> · Database (default) ·
+      asia-southeast2 · Paket Spark</div>
+    <div class="sub">Diambil 2026-11-16T05:07:41.405895+00:00 (UTC) lewat Firestore REST API
+      dengan token pemilik project.</div>
+    <div class="note"><b>Catatan:</b> gambar ini dirakit dari respons REST API,
+      bukan screenshot Firebase Console. Screenshot Console asli dilampirkan
+      terpisah oleh mahasiswa (memerlukan login Google).</div>
+    <div class="grid">
+      
+    <div class="card">
+      <div class="card-head"><span class="dot"></span>
+        <b>users</b><span class="count">2 dokumen</span></div>
+      <div class="chips"><code>JRYpdzItPOcyCYHNI2plizDAyHg1</code><code>stjEG021jVXudJIN0uY57wdhoDq1</code></div>
+      
+    </div>
+      
+    <div class="card">
+      <div class="card-head"><span class="dot"></span>
+        <b>products</b><span class="count">10 dokumen</span></div>
+      <div class="chips"><code>P01</code><code>P02</code><code>P03</code><code>P04</code><code>P05</code><code>P06</code><code>P07</code><code>P08</code><code>P09</code><code>P10</code></div>
+      
+    </div>
+      
+    <div class="card">
+      <div class="card-head"><span class="dot"></span>
+        <b>skin_profiles</b><span class="count">1 dokumen</span></div>
+      <div class="chips"><code>stjEG021jVXudJIN0uY57wdhoDq1</code></div>
+      
+    </div>
+      
+    <div class="card">
+      <div class="card-head"><span class="dot"></span>
+        <b>orders</b><span class="count">3 dokumen</span></div>
+      <div class="chips"><code>ORD-20261116-28504</code><code>ORD-20261116-59338</code><code>ORD-20261116-62942</code></div>
+      
+    </div>
+      
+    <div class="card">
+      <div class="card-head"><span class="dot"></span>
+        <b>carts</b><span class="count">0 dokumen</span></div>
+      <div class="chips"><span class="muted">sub-collection berisi dokumen items</span></div>
+      <div class="chips"><code>carts/{uid}/items → P01</code></div>
+    </div>
+      <div class="card">
+        <div class="card-head"><span class="dot"></span><b>Ringkasan</b></div>
+        <div class="chips">
+          <code>5 collection</code><code>Create + Read</code>
+          <code>StreamBuilder .snapshots()</code><code>Security Rules default-deny</code>
+        </div>
+      </div>
+    </div>
+    <h2>Dokumen orders</h2>
+    <table><thead><tr><th>ID dokumen</th><th>uid</th><th>items</th>
+      <th>total</th><th>status</th></tr></thead><tbody><tr><td><code>ORD-20261116-28504</code></td>
+      <td><code>stjEG021jVXu…</code></td>
+      <td>P01 x1</td><td>Rp 55.000</td>
+      <td><span class="badge">diproses</span></td></tr><tr><td><code>ORD-20261116-59338</code></td>
+      <td><code>stjEG021jVXu…</code></td>
+      <td>P01 x1</td><td>Rp 55.000</td>
+      <td><span class="badge">diproses</span></td></tr><tr><td><code>ORD-20261116-62942</code></td>
+      <td><code>stjEG021jVXu…</code></td>
+      <td>P01 x1</td><td>Rp 55.000</td>
+      <td><span class="badge">diproses</span></td></tr></tbody></table>
+    <h2>Dokumen skin_profiles</h2>
+    <table><thead><tr><th>ID dokumen</th><th>tipeKulit</th>
+      <th>concern</th><th>alergi</th></tr></thead><tbody><tr><td><code>stjEG021jVXudJIN0uY57wdhoDq1</code></td>
+      <td>Berminyak</td><td>Jerawat</td>
+      <td>-</td></tr></tbody></table>
+    <div class="foot">SkinCare Store · Are Kusuma Pratiwi · 23.01.55.0014 ·
+      Modul Minggu 10 — Cloud Firestore: Collection, Tambah &amp; Tampilkan Data</div>
+  </body></html>
