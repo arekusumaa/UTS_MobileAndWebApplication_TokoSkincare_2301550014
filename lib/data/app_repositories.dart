@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'data_sources/firestore_data_source.dart';
 import 'data_sources/mock_cart_source.dart';
 import 'data_sources/mock_order_source.dart';
@@ -47,7 +49,11 @@ class AppRepositories {
       products: MockProductSource(),
       orders: MockOrderSource(),
       skinProfiles: MockSkinProfileSource(),
-      users: MockUserSource(),
+      // Mode simulasi tetap memakai Firebase Auth untuk login, jadi role
+      // admin dicocokkan dari email akun yang sedang masuk.
+      users: MockUserSource(
+        emailSaatIni: () => FirebaseAuth.instance.currentUser?.email,
+      ),
       carts: MockCartSource(),
       sync: DataSync(),
     );

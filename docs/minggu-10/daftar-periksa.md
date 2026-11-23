@@ -51,7 +51,7 @@
 | 37 | Screenshot alur aplikasi | `bukti/01…18-*.png` (16 screenshot) | ✅ |
 | 38 | Bukti isi collection | `bukti/19-isi-collection.png` (dari REST API, diberi catatan kejujuran) | ✅ |
 | 39 | `flutter analyze` | **0 error, 0 warning** (50 info) | ✅ |
-| 40 | `flutter test` | **50/50 lulus** | ✅ |
+| 40 | `flutter test` | **59/59 lulus** | ✅ |
 | 41 | `flutter build web --release` | Berhasil | ✅ |
 | 42 | Uji Rules / integrasi migrasi / integrasi modul | **13/13 · 8/8 · 10/10 SESUI**, 0 console error | ✅ |
 | 43 | Skrip pendukung | `promote_admin.py`, `uji_rules.py`, `verifikasi_data.py`, `uji-firestore-m10.js`, `uji-modul-m10.js`, `buat-bukti-data.js` | ✅ |

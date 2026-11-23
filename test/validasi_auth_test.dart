@@ -80,4 +80,29 @@ void main() {
           'Terjadi kesalahan. Silakan coba lagi.');
     });
   });
+
+  group('tentukanRole', () {
+    test('profil Firestore admin menang atas email', () {
+      expect(tentukanRole('admin@skincare.id', 'admin'), 'admin');
+    });
+
+    test('profil Firestore pelanggan menang atas email admin', () {
+      expect(tentukanRole('admin@skincare.id', 'pelanggan'), 'pelanggan');
+    });
+
+    test('profil belum ada: email admin dipakai sebagai fallback', () {
+      expect(tentukanRole('admin@skincare.id', null), 'admin');
+      expect(tentukanRole(' ADMIN@SKINCARE.ID ', null), 'admin');
+    });
+
+    test('profil belum ada: email lain tetap pelanggan', () {
+      expect(tentukanRole('rina@mail.com', null), 'pelanggan');
+      expect(tentukanRole('palsu@admin@skincare.id', null), 'pelanggan');
+    });
+
+    test('role dari profil dinormalisasi', () {
+      expect(tentukanRole('rina@mail.com', ' ADMIN '), 'admin');
+      expect(tentukanRole('rina@mail.com', ''), 'pelanggan');
+    });
+  });
 }

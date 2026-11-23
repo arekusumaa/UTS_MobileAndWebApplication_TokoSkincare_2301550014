@@ -142,3 +142,31 @@ flutter run -d chrome --dart-define=PAKAI_MOCK=true
 Ini memakai `AppRepositories.mock()` (5 `Mock*Source`) tanpa menyentuh Firestore,
 berguna untuk screenshot UTS, demo offline, dan widget test. Brief UTS masih
 mengizinkan data simulasi, jadi kedua mode dapat ditunjukkan ke penguji.
+
+## 7. Perbaikan peran admin (login `admin@skincare.id`)
+
+Dokumen `users/JRYpdzItPOcyCYHNI2plizDAyHg1` di Firestore sudah benar
+(`role: admin`). Dua kondisi membuat UI tetap menampilkan **Pelanggan**:
+
+1. **Mode simulasi** — `MockData.users` memakai ID statis `U01`, sedangkan
+   Firebase Auth memberi UID `JRYpdzItPOcyCYHNI2plizDAyHg1`. Lookup
+   `isAdmin(uid)` selalu gagal.
+2. **Frame pertama login** — cache `users` belum terisi saat
+   `AuthProvider.login()` menghitung peran, sebelum snapshot Firestore datang.
+
+Perbaikannya:
+
+- `lib/core/utils/validasi_auth.dart` → `tentukanRole(email, roleDariProfil)`.
+  Profil Firestore tetap menjadi sumber kebenaran; fallback email hanya dipakai
+  bila profil belum ada.
+- `lib/providers/auth_provider.dart` → memakai helper tersebut, jadi peran admin
+  langsung benar walau snapshot belum selesai.
+- `lib/data/data_sources/mock_user_source.dart` → selain by UID, lookup juga
+  mencocokkan email lewat closure `emailSaatIni` yang disuntikkan
+  `AppRepositories.mock()`. Widget test tanpa Firebase tetap aman karena
+  closure bersifat opsional dan dipanggil malas.
+
+Bukti: `docs/minggu-10/bukti/22-role-admin-tampil.png` (badge **Admin** dan menu
+**Dashboard Admin — Kelola produk & pesanan** muncul). Uji otomatis:
+`test/validasi_auth_test.dart` grup `tentukanRole` (5 kasus) dan
+`test/mock_user_source_test.dart` (5 kasus). Total `flutter test` **59/59**.

@@ -44,7 +44,7 @@ mengikuti bentuk yang diminta modul:
 Pemetaan lengkap butir modul ada di [`modul-resmi.md`](modul-resmi.md).
 
 **Ringkasan verifikasi terakhir:** `flutter analyze` 0 error/0 warning ·
-`flutter test` **50/50** · `flutter build web --release` berhasil ·
+`flutter test` **59/59** · `flutter build web --release` berhasil ·
 uji Rules **13/13** · integrasi migrasi **8/8** · integrasi modul resmi
 **10/10 SESUI**, tanpa console error.
 

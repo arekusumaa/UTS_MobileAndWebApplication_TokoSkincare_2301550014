@@ -10,7 +10,7 @@ Seluruh pengujian dilakukan terhadap **database sungguhan**
 | No | Pemeriksaan | Perintah | Hasil |
 | --- | --- | --- | --- |
 | 1 | Analisis statis | `flutter analyze` | **0 error, 0 warning**, 50 info (lint lama: `prefer_const`, depresiasi `withOpacity`) |
-| 2 | Unit + widget test | `flutter test --no-pub` | **50/50 lulus** |
+| 2 | Unit + widget test | `flutter test --no-pub` | **59/59 lulus** (tambah 5 kasus `tentukanRole` + 5 kasus `MockUserSource`) |
 | 3 | Build release | `flutter build web --release` | **Berhasil** (`build/web`, Wasm dry run sukses) |
 | 4 | Kompilasi rules | `firebase deploy --only firestore:rules` | `rules file firestore.rules compiled successfully` |
 | 5 | Deploy index | `firebase deploy --only firestore:indexes` | `deployed indexes ... successfully` |

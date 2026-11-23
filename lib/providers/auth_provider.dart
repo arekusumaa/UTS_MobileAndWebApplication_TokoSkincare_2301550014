@@ -7,12 +7,6 @@ import '../core/utils/validasi_auth.dart';
 import '../data/models/app_user.dart';
 import '../data/repositories/user_repository.dart';
 
-/// Email admin versi Minggu 9. Sejak Minggu 10 peran dibaca dari dokumen
-/// `users/{uid}` di Firestore, jadi konstanta ini **hanya** dipakai bila
-/// provider dibuat tanpa `UserRepository` (mode mock / widget test lama).
-/// Jalur produksi di `main.dart` selalu menyuntikkan repository Firestore.
-const String kAdminEmail = 'admin@skincare.id';
-
 /// Status autentikasi aplikasi.
 ///
 /// Autentikasi tetap bersumber dari Firebase Authentication, sedangkan
@@ -157,15 +151,11 @@ class AuthProvider extends ChangeNotifier {
         ? fallbackNama
         : (displayName.isNotEmpty ? displayName : namaLokal);
 
-    final String role;
-    if (_userRepository != null) {
-      // Sumber kebenaran otorisasi = Firestore, BUKAN email hard-code.
-      role = _userRepository.isAdmin(user.uid) ? 'admin' : 'pelanggan';
-    } else {
-      role = email.toLowerCase().trim() == kAdminEmail
-          ? 'admin'
-          : 'pelanggan';
-    }
+    // Sumber kebenaran = dokumen `users/{uid}` (Firestore / mock). Fallback
+    // email hanya dipakai bila profil belum termuat, supaya admin tidak
+    // sempat tampil sebagai pelanggan pada frame pertama setelah login.
+    final profil = _userRepository?.getUserById(user.uid);
+    final String role = tentukanRole(email, profil?.role);
 
     return AppUser(
       id: user.uid,

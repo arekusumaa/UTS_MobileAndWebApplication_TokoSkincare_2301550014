@@ -4,6 +4,25 @@
 /// hasil uji teman mudah dicocokkan. Validasi umum aplikasi tetap memakai
 /// [Validators] di core/utils/validators.dart.
 
+/// Email admin bawaan (Minggu 9). Sejak Minggu 10 peran bersumber dari
+/// dokumen `users/{uid}` di Firestore. Konstanta ini dipakai hanya sebagai
+/// fallback saat profil belum tersedia (mode mock / snapshot belum datang).
+const String kAdminEmail = 'admin@skincare.id';
+
+/// Tentukan peran pengguna.
+///
+/// Bila [roleDariProfil] tersedia, itulah sumber kebenaran (Firestore).
+/// Fallback ke email hanya dipakai saat profil belum ada — ini yang membuat
+/// akun admin tetap dikenali di mode simulasi maupun pada frame pertama
+/// sebelum listener Firestore selesai memuat dokumen `users/{uid}`.
+String tentukanRole(String email, String? roleDariProfil) {
+  final peran = roleDariProfil?.trim().toLowerCase();
+  if (peran != null && peran.isNotEmpty) {
+    return peran == 'admin' ? 'admin' : 'pelanggan';
+  }
+  return email.trim().toLowerCase() == kAdminEmail ? 'admin' : 'pelanggan';
+}
+
 /// Email wajib diisi dan harus berformat email.
 String? validasiEmail(String? nilai) {
   final email = nilai?.trim() ?? '';
