@@ -176,15 +176,18 @@ Bukti: `docs/minggu-10/bukti/22-role-admin-tampil.png` (badge **Admin** dan menu
 Modul Minggu 10 hanya mewajibkan Create & Read; Update/Delete sudah ada di
 kode sejak awal lewat `ProductRepository` dan benar-benar menulis ke
 Firestore. Yang kurang adalah **keterlihatan**: tombol tambah hanya berupa
-FAB `+`, dan ikon edit/hapus tanpa tooltip.
+FAB `+`, dan ikon edit/hapus tanpa keterangan.
 
-Perbaikan pada `lib/screens/admin/kelola_produk_screen.dart`:
+Tampilan `lib/screens/admin/kelola_produk_screen.dart` sudah diperbarui:
 
-- AppBar kini memuat tombol teks eksplisit **"+ Tambah Produk"** (FAB tetap ada).
-- Ikon edit memakai tooltip `Edit <nama produk>`, ikon hapus
-  `Hapus <nama produk>`, FAB `Tambah produk baru`, tombol kembali diberi
-  tooltip juga.
+- Panel header **"Katalog Produk"** menampilkan jumlah produk dan tombol
+  besar bertulisan **"+ Tambah Produk Baru"** (di mobile: **"+ Tambah"**).
+- Setiap baris produk kini memakai tombol bertulisan **Edit** dan **Hapus**,
+  bukan lagi ikon kecil tanpa label. Keduanya diberi `Tooltip` dengan nama
+  produk agar mudah dikenali pembaca layar dan otomasi.
+- Baris produk tetap bisa diklik untuk masuk ke form edit.
 - Alur hapus tetap memakai dialog konfirmasi.
+- FAB dan tombol AppBar yang duplikat dihilangkan supaya tidak membingungkan.
 
 Operasi tulis sudah memakai jalur yang aman:
 

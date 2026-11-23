@@ -95,17 +95,85 @@ async function semuaAria(page) {
   );
 }
 
-async function barisProduk(page, nama) {
-  return page.evaluate((n) => {
-    for (const el of document.querySelectorAll("flt-semantics")) {
-      const a = el.getAttribute("aria-label") || "";
-      if ((el.getAttribute("role") || "") === "button" && a.includes(n)) {
+// Flutter menggabungkan seluruh baris menjadi satu node button dengan
+// aria-label "Edit <nama>...", lalu menaruh tombol "Edit"/"Hapus" bertulisan
+// sebagai node button terpisah. Cari baris lewat aria, lalu tombol dengan teks
+// persis yang paling dekat secara vertikal.
+async function gulirKeProduk(page, nama) {
+  for (let i = 0; i < 18; i++) {
+    const y = await page.evaluate((n) => {
+      for (const el of document.querySelectorAll("flt-semantics")) {
+        const a = el.getAttribute("aria-label") || "";
+        if (!a.includes(n)) continue;
+        if (!/Edit|Hapus/.test((el.innerText || ""))) continue;
         const r = el.getBoundingClientRect();
-        return { y: Math.round(r.y + r.height / 2) };
+        if (r.height > 2) return r.y + r.height / 2;
       }
+      return null;
+    }, nama);
+    // Baris terakhir berhenti di y≈844 pada viewport 900; itu masih bisa diklik.
+    if (y != null && y > 150 && y < 875) return y;
+    await page.mouse.move(800, 500);
+    await page.mouse.wheel(0, y == null || y >= 875 ? 320 : -320);
+    await sleep(600);
+  }
+  throw new Error(`produk "${nama}" tidak bisa digulir ke layar`);
+}
+
+async function klikAksiBaris(page, awalan, nama) {
+  const barisY = await gulirKeProduk(page, nama);
+  const n = await page.evaluate(
+    ({ awalan, barisY }) => {
+      const semua = Array.from(document.querySelectorAll("flt-semantics"));
+
+      let terbaik = null;
+      for (const el of semua) {
+        if ((el.getAttribute("role") || "") !== "button") continue;
+        if ((el.innerText || "").trim() !== awalan) continue;
+        if ((el.getAttribute("aria-label") || "").trim()) continue;
+        const r = el.getBoundingClientRect();
+        if (r.width < 2 || r.height < 2) continue;
+        const y = r.y + r.height / 2;
+        const jarak = Math.abs(y - barisY);
+        if (jarak > 45) continue;
+        if (!terbaik || jarak < terbaik.jarak) {
+          terbaik = { x: r.x + r.width / 2, y, jarak };
+        }
+      }
+      return terbaik;
+    },
+    { awalan, barisY }
+  );
+  if (!n) throw new Error(`tombol ${awalan} "${nama}" tidak ditemukan`);
+  await klikKoordinat(page, n.x, n.y);
+}
+
+// Tombol Hapus pada dialog konfirmasi tidak punya aria-label, jadi dibedakan
+// dari tombol Hapus pada baris produk (yang punya tooltip "Hapus <nama>").
+async function klikDialogHapus(page) {
+  const n = await page.evaluate(() => {
+    const semua = Array.from(document.querySelectorAll("flt-semantics"));
+    // Batasi pencarian ke dalam dialog konfirmasi.
+    const dialog = semua.find((el) =>
+      (el.innerText || "").includes("Yakin ingin menghapus")
+    );
+    const d = dialog?.getBoundingClientRect();
+    for (const el of semua) {
+      if ((el.getAttribute("role") || "") !== "button") continue;
+      if ((el.innerText || "").trim() !== "Hapus") continue;
+      const r = el.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2) continue;
+      const x = r.x + r.width / 2;
+      const y = r.y + r.height / 2;
+      if (d && (x < d.x || x > d.x + d.width || y < d.y || y > d.y + d.height)) {
+        continue;
+      }
+      return { x, y };
     }
     return null;
-  }, nama);
+  });
+  if (!n) throw new Error("tombol Hapus pada dialog tidak ditemukan");
+  await klikKoordinat(page, n.x, n.y);
 }
 
 (async () => {
@@ -172,10 +240,9 @@ async function barisProduk(page, nama) {
     readOk);
 
   // ------------------------------------------------------------------ 3 EDIT
-  const baris = await barisProduk(page, NAMA_UJI);
-  if (!baris) throw new Error("baris produk uji tidak ditemukan untuk diedit");
-  await klikKoordinat(page, 1500, baris.y - 4); // ikon edit
-  await sleep(3000);
+  await klikAksiBaris(page, "Edit", NAMA_UJI);
+  // Transisi ke form Firestore-backed bisa memakan beberapa detik.
+  await sleep(7000);
   await isi(page, 1, "88888");
   await klik(page, "Simpan Perubahan");
   await sleep(6500);
@@ -188,13 +255,9 @@ async function barisProduk(page, nama) {
   await page.screenshot({ path: path.join(OUT, "24-crud-edit-produk.png") });
 
   // ---------------------------------------------------------------- 4 DELETE
-  const baris2 = await barisProduk(page, NAMA_UJI);
-  if (!baris2) throw new Error("baris produk uji tidak ditemukan untuk dihapus");
-  await klikKoordinat(page, 1540, baris2.y - 4); // ikon hapus
+  await klikAksiBaris(page, "Hapus", NAMA_UJI);
   await sleep(1200);
-  // Tooltip ikon juga mengandung kata "Hapus", jadi cocokkan teks persis
-  // pada tombol dialog konfirmasi.
-  await F.clickNode(page, "Hapus", "button");
+  await klikDialogHapus(page);
   await sleep(6500);
   const setelahHapus = await cariDokumenUji();
   const hapusOk = setelahHapus == null;
