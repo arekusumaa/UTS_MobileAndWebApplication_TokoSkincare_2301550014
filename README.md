@@ -119,10 +119,15 @@ Dokumentasi lengkap: [tabel uji 9 kasus](docs/minggu-09/tabel-uji-login.md),
 Untuk mengulang uji login otomatis:
 
 ```bash
-cd build/web && python -m http.server 8137 --bind 127.0.0.1
+# dari root project — server dengan header anti-cache (direkomendasikan)
+python scripts/serve_web_no_cache.py
 # terminal lain:
 cd video && node scripts/uji-login-m9.js
 ```
+
+> Kalau tampilan terasa tidak berubah setelah rebuild, gunakan server di atas
+> lalu buka `http://127.0.0.1:8137` dengan **Ctrl+Shift+R** (hard reload),
+> atau buka jendela incognito. Browser dapat menyimpan `main.dart.js` lama.
 
 ## Minggu 10 — Cloud Firestore: Collection, Tambah & Tampilkan Data
 
