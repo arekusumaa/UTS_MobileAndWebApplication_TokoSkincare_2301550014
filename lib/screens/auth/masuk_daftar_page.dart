@@ -159,9 +159,20 @@ class _MasukDaftarPageState extends State<MasukDaftarPage> {
                     width: _modeDaftar ? 56 : 72,
                     height: _modeDaftar ? 56 : 72,
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
+                      gradient: const LinearGradient(
+                        colors: [AppColors.gradientA, AppColors.gradientB],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(
-                          _modeDaftar ? 16 : 20),
+                          _modeDaftar ? 18 : 22),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primaryGlow.withValues(alpha: 0.5),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
                     ),
                     child: Icon(
                       Icons.spa,
@@ -174,7 +185,12 @@ class _MasukDaftarPageState extends State<MasukDaftarPage> {
                 Center(
                   child: Text(
                     _modeDaftar ? 'Buat Akun Baru' : 'SkinCare Store',
-                    style: AppTextStyles.judul,
+                    style: const TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                      letterSpacing: -0.4,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),

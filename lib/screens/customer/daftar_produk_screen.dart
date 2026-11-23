@@ -11,6 +11,7 @@ import '../../services/layanan_firestore.dart';
 import '../../widgets/common/app_bottom_nav.dart';
 import '../../widgets/common/app_sidebar.dart';
 import '../../widgets/common/empty_state.dart';
+import '../../widgets/common/product_card.dart';
 
 /// Padanan "DaftarRuangPage" pada modul Minggu 10.
 ///
@@ -105,6 +106,51 @@ class _DaftarProdukScreenState extends State<DaftarProdukScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(18),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            AppColors.gradientSoftA,
+                            AppColors.gradientSoftB,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        border: Border.all(color: AppColors.border),
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(Icons.spa_outlined,
+                                color: Colors.white, size: 22),
+                          ),
+                          const SizedBox(width: 12),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Koleksi Skincare',
+                                    style: AppTextStyles.subjudul),
+                                SizedBox(height: 2),
+                                Text(
+                                  'Temukan produk yang paling cocok untuk kulitmu',
+                                  style: AppTextStyles.keterangan,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 14),
                     TextField(
                       controller: _searchController,
                       decoration: const InputDecoration(
@@ -191,8 +237,8 @@ class _DaftarProdukScreenState extends State<DaftarProdukScreen> {
               )
             else
               SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.margin),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: AppConstants.margin),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: isWeb ? 250 : 200,
@@ -243,88 +289,6 @@ class _DaftarProdukScreenState extends State<DaftarProdukScreen> {
   }
 
   Widget _buildProductCard(Product product) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              color: AppColors.backgroundSecondary,
-              child: Stack(
-                children: [
-                  const Center(
-                    child: Icon(Icons.image_outlined,
-                        size: 40, color: AppColors.textTertiary),
-                  ),
-                  if (product.isStokHabis)
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.error,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Text('Stok Habis',
-                            style: TextStyle(color: Colors.white, fontSize: 10)),
-                      ),
-                    )
-                  else if (product.isStokMenipis)
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.warning,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Text('Menipis',
-                            style: TextStyle(color: Colors.white, fontSize: 10)),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.backgroundSecondary,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(product.kategori,
-                      style: const TextStyle(
-                          fontSize: 10, color: AppColors.textSecondary)),
-                ),
-                const SizedBox(height: 6),
-                Text(product.nama,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w500),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 4),
-                Text(product.hargaFormatted,
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.primary)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+    return ProductCard(product: product);
   }
 }

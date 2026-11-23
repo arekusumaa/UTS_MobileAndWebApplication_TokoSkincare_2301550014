@@ -79,40 +79,91 @@ class _BerandaScreenState extends State<BerandaScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Sapaan realtime dari users/{uid} (modul Minggu 10, slide 10/16).
+          // Hero sapaan realtime dari users/{uid} (modul Minggu 10).
           // Profil yang diubah di Console langsung terbaca tanpa login ulang.
-          StreamBuilder<AppUser?>(
-            stream: _streamProfil,
-            builder: (context, snapshot) => Text(
-              'Halo, ${snapshot.data?.nama ?? userName}!',
-              style: AppTextStyles.judul,
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.gradientA, AppColors.gradientB],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primaryGlow.withValues(alpha: 0.45),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 4),
-          Text('Temukan skincare terbaik untuk kulitmu', style: AppTextStyles.keterangan),
-          const SizedBox(height: 20),
-
-          // Search bar
-          GestureDetector(
-            onTap: () => context.go('/produk'),
-            child: Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: AppColors.backgroundSecondary,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.search, color: AppColors.textSecondary),
-                  SizedBox(width: 12),
-                  Text(
-                    'Cari produk skincare...',
-                    style: TextStyle(color: AppColors.textTertiary, fontSize: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(9),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.auto_awesome, color: Colors.white),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: StreamBuilder<AppUser?>(
+                        stream: _streamProfil,
+                        builder: (context, snapshot) => Text(
+                          'Halo, ${snapshot.data?.nama ?? userName}!',
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Temukan skincare terbaik untuk kulitmu',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white70,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 16),
+                GestureDetector(
+                  onTap: () => context.go('/produk'),
+                  child: Container(
+                    height: 46,
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.search, color: AppColors.primary, size: 20),
+                        SizedBox(width: 10),
+                        Text(
+                          'Cari produk skincare...',
+                          style: TextStyle(
+                            color: AppColors.textSecondary, fontSize: 14),
+                        ),
+                        Spacer(),
+                        Icon(Icons.arrow_forward_ios,
+                            size: 14, color: AppColors.primary),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 20),

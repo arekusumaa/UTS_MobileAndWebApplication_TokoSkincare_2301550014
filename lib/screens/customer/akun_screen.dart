@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/cart_provider.dart';
@@ -60,21 +59,41 @@ class AkunScreen extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.backgroundSecondary,
-              borderRadius: BorderRadius.circular(16),
+              gradient: const LinearGradient(
+                colors: [AppColors.gradientA, AppColors.gradientB],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primaryGlow.withValues(alpha: 0.4),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: Column(
               children: [
                 CircleAvatar(
-                  radius: 36,
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  child: Text(initials, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  radius: 38,
+                  backgroundColor: Colors.white,
+                  foregroundColor: AppColors.primary,
+                  child: Text(initials,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
                 const SizedBox(height: 12),
-                Text(user.nama, style: AppTextStyles.subjudul),
+                Text(user.nama,
+                    style: const TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    )),
                 const SizedBox(height: 4),
-                Text(user.email, style: AppTextStyles.keterangan),
+                Text(user.email,
+                    style: const TextStyle(
+                      fontSize: 13, color: Colors.white70)),
                 const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),

@@ -148,6 +148,7 @@ Branch `minggu-10-firestore` mengganti `MockDataSource` dengan
 | Admin | `python scripts/promote_admin.py` menaikkan peran lewat kredensial pemilik project (klien tidak bisa mengangkat diri sendiri) |
 | Seed | Login admin pertama mengisi 10 produk contoh bila `products` kosong |
 | Mode simulasi | `--dart-define=PAKAI_MOCK=true` tetap tersedia untuk UTS |
+| **Tampilan** | Tema global diperbarui: AppBar melengkung, kartu gradien & bayangan, kartu produk berwarna per kategori, hero Beranda, header Akun, dashboard admin responsif, dan halaman Kelola Produk lengkap dengan pencarian/filter/CRUD |
 
 **Verifikasi**: `flutter analyze` 0 error/0 warning · `flutter test` **59/59** ·
 `flutter build web --release` berhasil · **uji Rules 13/13 SESUI** ·

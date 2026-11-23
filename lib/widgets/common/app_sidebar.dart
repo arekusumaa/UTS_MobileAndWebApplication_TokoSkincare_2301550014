@@ -16,10 +16,21 @@ class AppSidebar extends StatelessWidget {
     return NavigationRail(
       selectedIndex: currentIndex,
       onDestinationSelected: onTap,
-      backgroundColor: AppColors.background,
-      indicatorColor: AppColors.primaryLight,
-      selectedIconTheme: const IconThemeData(color: AppColors.primary),
+      backgroundColor: AppColors.surface,
+      indicatorColor: AppColors.primary,
+      selectedIconTheme: const IconThemeData(color: Colors.white),
       unselectedIconTheme: const IconThemeData(color: AppColors.textSecondary),
+      selectedLabelTextStyle: const TextStyle(
+        color: AppColors.primaryDark,
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+      ),
+      unselectedLabelTextStyle: const TextStyle(
+        color: AppColors.textSecondary,
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+      ),
+      groupAlignment: -0.6,
       labelType: NavigationRailLabelType.all,
       destinations: const [
         NavigationRailDestination(

@@ -214,3 +214,36 @@ cek menu admin): **5/5 SESUI**, 0 console error. Bukti:
 `bukti/23-crud-tambah-produk.png`, `bukti/24-crud-edit-produk.png`,
 `bukti/hasil-uji-crud-produk.json`. Dokumen uji otomatis sudah dihapus dari
 database (jumlah `products` kembali ke 10).
+
+## 9. Penyegaran tampilan menyeluruh
+
+Permintaan berikutnya adalah mengubah tampilan **seluruh** website, bukan hanya
+halaman admin. Perubahan dilakukan di lapisan tema agar konsisten ke 18 layar:
+
+| Berkas | Perubahan |
+|---|---|
+| `lib/core/theme/app_colors.dart` | Permukaan hangat `#FFF9FB`, `primaryGlow`, pasangan gradien pink, warna kategori yang lebih jenuh. Identitas `#D95778` tetap dipertahankan. |
+| `lib/core/theme/app_theme.dart` | AppBar melengkung 20px + bayangan pink, kartu radius 18px + elevasi lembut, input radius 14px, tombol 50px, chip pill, NavigationBar indikator solid pink, SnackBar melayang, dialog melengkung. |
+| `lib/widgets/common/product_card.dart` | Ilustrasi gradasi sesuai kategori, lingkaran ikon spa, badge kategori, badge stok, harga dalam pill. |
+| `lib/widgets/common/empty_state.dart` | Lingkaran gradien dengan bayangan; dibungkus `SingleChildScrollView` agar tidak overflow pada ruang sempit. |
+| `lib/widgets/common/app_sidebar.dart` | Indikator aktif solid pink, label tebal untuk menu terpilih. |
+| `lib/screens/customer/beranda_screen.dart` | Hero gradien pink berisi sapaan realtime + kolom cari putih. |
+| `lib/screens/customer/daftar_produk_screen.dart` | Banner "Koleksi Skincare" dan kartu produk memakai `ProductCard` yang baru. |
+| `lib/screens/customer/akun_screen.dart` | Header profil gradien dengan teks putih dan avatar kontras. |
+| `lib/screens/auth/masuk_daftar_page.dart` | Logo gradien + bayangan, judul lebih tebal. |
+| `lib/screens/admin/admin_dashboard_screen.dart` | 4 kartu statistik responsif di layar lebar, kartu aksi cepat dengan ikon gradien. |
+
+Semua perubahan bersifat presentasional — alur data, Security Rules, dan
+kontrak repository tidak berubah. Tombol **Refresh** pada Kelola Produk
+memanggil `ProductProvider.refreshData()` yang baru.
+
+Bukti visual: `bukti/tampilan-login.png`, `tampilan-beranda.png`,
+`tampilan-daftar-produk.png`, `tampilan-akun.png`,
+`tampilan-admin-dashboard.png`, `tampilan-admin-produk.png` (diambil otomatis
+oleh `video/scripts/ambil-tampilan.js`). Regresi: `flutter test` 59/59 dan
+`uji-crud-produk.js` 5/5 SESUI.
+
+> Catatan operasional: token OAuth `firebase-tools` dapat kedaluwarsa. Bila
+> uji integrasi melaporkan "dokumen tidak ditemukan" padahal UI menampilkannya,
+> jalankan `firebase firestore:databases:list --project toko-skincare-fec17`
+> untuk menyegarkan token sebelum menjalankan skrip uji.
