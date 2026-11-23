@@ -243,6 +243,32 @@ Bukti visual: `bukti/tampilan-login.png`, `tampilan-beranda.png`,
 oleh `video/scripts/ambil-tampilan.js`). Regresi: `flutter test` 59/59 dan
 `uji-crud-produk.js` 5/5 SESUI.
 
+## 10. Pintasan CRUD produk yang mudah ditemukan
+
+Penyegaran visual membuat halaman Beranda lebih menarik, tetapi tombol CRUD
+masih tersembunyi di Akun → Dashboard Admin → Kelola Produk. Admin yang sedang
+di Beranda tidak melihat akses tersebut, sehingga permintaan berikutnya adalah
+"tambahkan button serta dilengkapi (bisa menambahkan produk, edit produk dan
+hapus produk)".
+
+Solusinya adalah mendekatkan aksi ke halaman yang paling sering dibuka:
+
+| Berkas | Perubahan |
+|---|---|
+| `lib/widgets/common/admin_product_shortcuts.dart` **(baru)** | Panel "Alat Administrasi" dengan tiga tombol bertulisan: **Tambah Produk** (`/admin/produk/form`), **Edit Produk** dan **Hapus Produk** (`/admin/produk`). Responsif: tiga kolom di layar lebar, bertumpuk di layar sempit. Edit/Hapus mengarah ke daftar karena produk dipilih per baris. |
+| `lib/screens/customer/beranda_screen.dart` | Panel pintasan ditampilkan tepat di bawah hero **hanya untuk admin**; tombol **Kelola Produk** juga ditambahkan di AppBar (desktop: teks lengkap, mobile: "Admin"). Sidebar/bottom nav mendapat pintasan admin indeks 4. |
+| `lib/screens/customer/akun_screen.dart` | Menu **Kelola Produk — Tambah, edit, dan hapus produk** ditambahkan setelah Dashboard Admin; sidebar/bottom nav juga diberi pintasan admin. |
+| `lib/widgets/common/app_sidebar.dart`, `lib/widgets/common/app_bottom_nav.dart` | Parameter opsional `isAdmin` (default `false`). Indeks 4 hanya muncul untuk admin, sehingga pengguna biasa tetap melihat empat menu seperti sebelumnya. |
+
+Tidak ada perubahan pada repository, Rules, atau alur tulis Firestore —
+tombol baru hanya memanggil rute yang sudah ada. Pelanggan tidak melihat
+pintasan ini karena `AuthProvider.isAdmin` bernilai `false`.
+
+Verifikasi: `flutter analyze` 0 error/0 warning; `flutter test` 59/59;
+`flutter build web --release` OK; `uji-crud-produk.js` **5/5 SESUI**, 0 console
+error; `products` kembali berisi 10 dokumen. Screenshot `tampilan-beranda.png`
+dan `tampilan-akun.png` diperbarui oleh `ambil-tampilan.js`.
+
 > Catatan operasional: token OAuth `firebase-tools` dapat kedaluwarsa. Bila
 > uji integrasi melaporkan "dokumen tidak ditemukan" padahal UI menampilkannya,
 > jalankan `firebase firestore:databases:list --project toko-skincare-fec17`

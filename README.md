@@ -142,7 +142,7 @@ Branch `minggu-10-firestore` mengganti `MockDataSource` dengan
 | Dependency injection | `lib/data/app_repositories.dart` → `firestore()` / `mock()` / `custom()`; `DataSync` menyegarkan semua Provider |
 | **Lapisan modul resmi** | `lib/services/layanan_firestore.dart` → `LayananToko` / `LayananFirestore` / `LayananMemori`; `StreamBuilder` + `.snapshots()` di Beranda, Daftar Produk, Riwayat Pesanan |
 | **Create & Read** | Form Profil Kulit → `skin_profiles/{uid}`; Checkout → `orders/{id}` |
-| **CRUD produk admin** | Dashboard Admin → Kelola Produk → panel **Katalog Produk** (statistik + tombol **+ Tambah Produk Baru**), pencarian, filter kategori, urutan, Refresh, serta tombol **Edit**/**Hapus** per baris; semuanya menulis/delete dokumen `products` di Firestore, hanya admin yang diizinkan |
+| **CRUD produk admin** | Pintasan langsung: Beranda → panel **Alat Administrasi** (**Tambah / Edit / Hapus Produk**), tombol AppBar **Kelola Produk**, menu sidebar/bottom nav, atau Akun → **Kelola Produk**. Lanjutan: Dashboard Admin → Kelola Produk → panel **Katalog Produk** (statistik + tombol **+ Tambah Produk Baru**), pencarian, filter kategori, urutan, Refresh, serta tombol **Edit**/**Hapus** per baris; semuanya menulis/delete dokumen `products` di Firestore, hanya admin yang diizinkan |
 | **Aturan bisnis** | `cekAturanPesanan()` menolak stok kurang & pesanan identik yang masih `Menunggu` sebelum dokumen ditulis |
 | Keamanan | [`firestore.rules`](firestore.rules): default-deny, wajib login, isolasi per `uid`, validasi bentuk dokumen, `role` hanya bisa diubah admin |
 | Admin | `python scripts/promote_admin.py` menaikkan peran lewat kredensial pemilik project (klien tidak bisa mengangkat diri sendiri) |

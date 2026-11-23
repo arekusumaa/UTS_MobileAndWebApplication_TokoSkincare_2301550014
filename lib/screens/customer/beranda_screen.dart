@@ -11,6 +11,7 @@ import '../../providers/skin_profile_provider.dart';
 import '../../data/models/app_user.dart';
 import '../../data/models/product.dart';
 import '../../services/layanan_firestore.dart';
+import '../../widgets/common/admin_product_shortcuts.dart';
 import '../../widgets/common/app_bottom_nav.dart';
 import '../../widgets/common/app_sidebar.dart';
 import '../../widgets/common/logout_button.dart';
@@ -44,7 +45,8 @@ class _BerandaScreenState extends State<BerandaScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final auth = context.read<AuthProvider>();
-      context.read<SkinProfileProvider>()
+      context
+          .read<SkinProfileProvider>()
           .loadProfile(auth.currentUser?.id ?? '');
     });
   }
@@ -62,6 +64,9 @@ class _BerandaScreenState extends State<BerandaScreen> {
       case 3:
         context.go('/akun');
         break;
+      case 4:
+        context.go('/admin/produk');
+        break;
     }
   }
 
@@ -73,6 +78,20 @@ class _BerandaScreenState extends State<BerandaScreen> {
     final isWeb = width >= AppConstants.mobileBreakpoint;
 
     final userName = auth.currentUser?.nama ?? 'Pengguna';
+
+    final actions = <Widget>[
+      if (auth.isAdmin)
+        Tooltip(
+          message: 'Kelola produk',
+          child: TextButton.icon(
+            onPressed: () => context.go('/admin/produk'),
+            icon: const Icon(Icons.inventory_2_outlined, size: 18),
+            label: Text(isWeb ? 'Kelola Produk' : 'Admin'),
+            style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+          ),
+        ),
+      const LogoutButton(),
+    ];
 
     final content = SingleChildScrollView(
       padding: const EdgeInsets.all(AppConstants.margin),
@@ -110,7 +129,8 @@ class _BerandaScreenState extends State<BerandaScreen> {
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.auto_awesome, color: Colors.white),
+                      child:
+                          const Icon(Icons.auto_awesome, color: Colors.white),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -154,7 +174,7 @@ class _BerandaScreenState extends State<BerandaScreen> {
                         Text(
                           'Cari produk skincare...',
                           style: TextStyle(
-                            color: AppColors.textSecondary, fontSize: 14),
+                              color: AppColors.textSecondary, fontSize: 14),
                         ),
                         Spacer(),
                         Icon(Icons.arrow_forward_ios,
@@ -168,6 +188,12 @@ class _BerandaScreenState extends State<BerandaScreen> {
           ),
           const SizedBox(height: 20),
 
+          // Pintasan CRUD produk khusus admin — terlihat langsung di Beranda.
+          if (auth.isAdmin) ...[
+            const AdminProductShortcuts(),
+            const SizedBox(height: 20),
+          ],
+
           // Skin profile banner
           if (skinProfile.profile.isEmpty)
             Container(
@@ -179,7 +205,8 @@ class _BerandaScreenState extends State<BerandaScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.face_retouching_natural, color: AppColors.primary),
+                  const Icon(Icons.face_retouching_natural,
+                      color: AppColors.primary),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -218,7 +245,8 @@ class _BerandaScreenState extends State<BerandaScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.check_circle, color: AppColors.success, size: 20),
+                  const Icon(Icons.check_circle,
+                      color: AppColors.success, size: 20),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -299,12 +327,16 @@ class _BerandaScreenState extends State<BerandaScreen> {
       return Scaffold(
         body: Row(
           children: [
-            AppSidebar(currentIndex: 0, onTap: (i) => _navigateTo(i)),
+            AppSidebar(
+              currentIndex: 0,
+              onTap: (i) => _navigateTo(i),
+              isAdmin: auth.isAdmin,
+            ),
             Expanded(
               child: Scaffold(
                 appBar: AppBar(
                   title: const Text('Beranda'),
-                  actions: const [LogoutButton()],
+                  actions: actions,
                 ),
                 body: content,
               ),
@@ -317,10 +349,14 @@ class _BerandaScreenState extends State<BerandaScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Beranda'),
-        actions: const [LogoutButton()],
+        actions: actions,
       ),
       body: content,
-      bottomNavigationBar: AppBottomNav(currentIndex: 0, onTap: (i) => _navigateTo(i)),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 0,
+        onTap: (i) => _navigateTo(i),
+        isAdmin: auth.isAdmin,
+      ),
     );
   }
 }

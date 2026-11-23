@@ -173,6 +173,19 @@ diverifikasi ulang langsung ke server Firestore memakai token pemilik project.
 kembali berisi 10 dokumen. Bukti: `bukti/23-crud-tambah-produk.png`,
 `bukti/24-crud-edit-produk.png`, `bukti/hasil-uji-crud-produk.json`.
 
+Uji dijalankan ulang setelah penambahan pintasan CRUD di Beranda/Akun dengan
+hasil tetap **5/5 SESUI**, 0 console error (id uji `P1795421042`, harga edit
+`88888`, dokumen dihapus). Rincian pintasan yang diverifikasi secara visual
+lewat `bukti/tampilan-beranda.png` dan `bukti/tampilan-akun.png`:
+
+| No | Titik masuk | Diharapkan | Hasil nyata | Status |
+|---|---|---|---|---|
+| 6 | Panel "Alat Administrasi" di Beranda | Tombol Tambah/Edit/Hapus Produk terlihat untuk admin | Ketiga tombol terlihat di bawah hero | SESUI |
+| 7 | AppBar Beranda | Tombol "Kelola Produk" tersedia | Tombol terlihat di kanan atas | SESUI |
+| 8 | Sidebar web | Menu "Kelola Produk" (indeks 4) muncul untuk admin | Menu terlihat di bawah "Akun" | SESUI |
+| 9 | Halaman Akun | Menu "Kelola Produk — Tambah, edit, dan hapus produk" | Menu terlihat setelah Dashboard Admin | SESUI |
+| 10 | Akun pelanggan | Pintasan admin tidak muncul | Kasus #5 pada tabel di atas: tidak muncul | SESUI |
+
 ---
 
 ## 7. Cara mengulang seluruh pengujian

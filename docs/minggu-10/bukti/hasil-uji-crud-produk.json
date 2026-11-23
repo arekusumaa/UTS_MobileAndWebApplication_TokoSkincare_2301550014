@@ -6,7 +6,7 @@
       "no": 1,
       "kasus": "Admin menambah produk lewat form",
       "diharapkan": "Dokumen products baru dengan harga 77777 dan stok 13",
-      "nyata": "id=P1795416345, harga=77777, stok=13",
+      "nyata": "id=P1795421042, harga=77777, stok=13",
       "status": "SESUI"
     },
     {

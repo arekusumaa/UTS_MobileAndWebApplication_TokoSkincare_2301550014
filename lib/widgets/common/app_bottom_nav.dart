@@ -4,10 +4,14 @@ class AppBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
+  /// Saat true, ditambahkan pintasan "Admin" (indeks 4) untuk admin.
+  final bool isAdmin;
+
   const AppBottomNav({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.isAdmin = false,
   });
 
   @override
@@ -15,27 +19,33 @@ class AppBottomNav extends StatelessWidget {
     return NavigationBar(
       selectedIndex: currentIndex,
       onDestinationSelected: onTap,
-      destinations: const [
-        NavigationDestination(
+      destinations: [
+        const NavigationDestination(
           icon: Icon(Icons.home_outlined),
           selectedIcon: Icon(Icons.home),
           label: 'Beranda',
         ),
-        NavigationDestination(
+        const NavigationDestination(
           icon: Icon(Icons.shop_outlined),
           selectedIcon: Icon(Icons.shop),
           label: 'Produk',
         ),
-        NavigationDestination(
+        const NavigationDestination(
           icon: Icon(Icons.shopping_cart_outlined),
           selectedIcon: Icon(Icons.shopping_cart),
           label: 'Keranjang',
         ),
-        NavigationDestination(
+        const NavigationDestination(
           icon: Icon(Icons.person_outline),
           selectedIcon: Icon(Icons.person),
           label: 'Akun',
         ),
+        if (isAdmin)
+          const NavigationDestination(
+            icon: Icon(Icons.admin_panel_settings_outlined),
+            selectedIcon: Icon(Icons.admin_panel_settings),
+            label: 'Admin',
+          ),
       ],
     );
   }

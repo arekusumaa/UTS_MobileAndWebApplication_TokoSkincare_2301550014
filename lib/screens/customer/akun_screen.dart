@@ -25,6 +25,9 @@ class AkunScreen extends StatelessWidget {
         break;
       case 3:
         break;
+      case 4:
+        context.go('/admin/produk');
+        break;
     }
   }
 
@@ -92,13 +95,16 @@ class AkunScreen extends StatelessWidget {
                     )),
                 const SizedBox(height: 4),
                 Text(user.email,
-                    style: const TextStyle(
-                      fontSize: 13, color: Colors.white70)),
+                    style:
+                        const TextStyle(fontSize: 13, color: Colors.white70)),
                 const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
-                    color: user.isAdmin ? AppColors.primaryLight : AppColors.successLight,
+                    color: user.isAdmin
+                        ? AppColors.primaryLight
+                        : AppColors.successLight,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -106,7 +112,9 @@ class AkunScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
-                      color: user.isAdmin ? AppColors.primaryDark : AppColors.success,
+                      color: user.isAdmin
+                          ? AppColors.primaryDark
+                          : AppColors.success,
                     ),
                   ),
                 ),
@@ -136,13 +144,20 @@ class AkunScreen extends StatelessWidget {
             subtitle: '${cart.totalItems} item',
             onTap: () => context.go('/keranjang'),
           ),
-          if (user.isAdmin)
+          if (user.isAdmin) ...[
             _buildMenuItem(
               icon: Icons.admin_panel_settings,
               title: 'Dashboard Admin',
               subtitle: 'Kelola produk & pesanan',
               onTap: () => context.go('/admin'),
             ),
+            _buildMenuItem(
+              icon: Icons.inventory_2_outlined,
+              title: 'Kelola Produk',
+              subtitle: 'Tambah, edit, dan hapus produk',
+              onTap: () => context.go('/admin/produk'),
+            ),
+          ],
           _buildMenuItem(
             icon: Icons.settings_outlined,
             title: 'Pengaturan',
@@ -164,7 +179,8 @@ class AkunScreen extends StatelessWidget {
                 await auth.logout();
               },
               icon: const Icon(Icons.logout, color: AppColors.error),
-              label: const Text('Keluar', style: TextStyle(color: AppColors.error)),
+              label: const Text('Keluar',
+                  style: TextStyle(color: AppColors.error)),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 48),
                 side: const BorderSide(color: AppColors.error),
@@ -182,7 +198,11 @@ class AkunScreen extends StatelessWidget {
       return Scaffold(
         body: Row(
           children: [
-            AppSidebar(currentIndex: 3, onTap: (i) => _navigateTo(context, i)),
+            AppSidebar(
+              currentIndex: 3,
+              onTap: (i) => _navigateTo(context, i),
+              isAdmin: user.isAdmin,
+            ),
             Expanded(
               child: Scaffold(
                 appBar: AppBar(title: const Text('Akun')),
@@ -197,7 +217,11 @@ class AkunScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Akun')),
       body: content,
-      bottomNavigationBar: AppBottomNav(currentIndex: 3, onTap: (i) => _navigateTo(context, i)),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 3,
+        onTap: (i) => _navigateTo(context, i),
+        isAdmin: user.isAdmin,
+      ),
     );
   }
 
@@ -212,9 +236,13 @@ class AkunScreen extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         leading: Icon(icon, color: AppColors.primary),
-        title: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-        trailing: const Icon(Icons.chevron_right, color: AppColors.textTertiary),
+        title: Text(title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+        subtitle: Text(subtitle,
+            style:
+                const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+        trailing:
+            const Icon(Icons.chevron_right, color: AppColors.textTertiary),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       ),
     );

@@ -5,10 +5,14 @@ class AppSidebar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
+  /// Saat true, ditambahkan pintasan "Kelola Produk" (indeks 4) untuk admin.
+  final bool isAdmin;
+
   const AppSidebar({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.isAdmin = false,
   });
 
   @override
@@ -32,27 +36,33 @@ class AppSidebar extends StatelessWidget {
       ),
       groupAlignment: -0.6,
       labelType: NavigationRailLabelType.all,
-      destinations: const [
-        NavigationRailDestination(
+      destinations: [
+        const NavigationRailDestination(
           icon: Icon(Icons.home_outlined),
           selectedIcon: Icon(Icons.home),
           label: Text('Beranda'),
         ),
-        NavigationRailDestination(
+        const NavigationRailDestination(
           icon: Icon(Icons.shop_outlined),
           selectedIcon: Icon(Icons.shop),
           label: Text('Produk'),
         ),
-        NavigationRailDestination(
+        const NavigationRailDestination(
           icon: Icon(Icons.shopping_cart_outlined),
           selectedIcon: Icon(Icons.shopping_cart),
           label: Text('Keranjang'),
         ),
-        NavigationRailDestination(
+        const NavigationRailDestination(
           icon: Icon(Icons.person_outline),
           selectedIcon: Icon(Icons.person),
           label: Text('Akun'),
         ),
+        if (isAdmin)
+          const NavigationRailDestination(
+            icon: Icon(Icons.inventory_2_outlined),
+            selectedIcon: Icon(Icons.inventory_2),
+            label: Text('Kelola Produk'),
+          ),
       ],
     );
   }

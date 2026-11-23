@@ -50,7 +50,7 @@
 | 36 | ≥2 commit baru | Lihat `git log` branch `minggu-10-firestore` | ✅ |
 | 37 | Screenshot alur aplikasi | `bukti/01…18-*.png` (16 screenshot) | ✅ |
 | 38 | Bukti isi collection | `bukti/19-isi-collection.png` (dari REST API, diberi catatan kejujuran) | ✅ |
-| 39 | `flutter analyze` | **0 error, 0 warning** (50 info) | ✅ |
+| 39 | `flutter analyze` | **0 error, 0 warning** (49 info) | ✅ |
 | 40 | `flutter test` | **59/59 lulus** | ✅ |
 | 41 | `flutter build web --release` | Berhasil | ✅ |
 | 42 | Uji Rules / integrasi migrasi / integrasi modul | **13/13 · 8/8 · 10/10 SESUI**, 0 console error | ✅ |
@@ -58,6 +58,7 @@
 | 44 | Dokumentasi `docs/minggu-10/` | 9 berkas Markdown + JSON hasil uji + bukti | ✅ |
 | 45 | Role admin tampil benar | Badge **Admin** + menu Dashboard Admin (`bukti/22-role-admin-tampil.png`) | ✅ |
 | 46 | CRUD produk admin | Panel **Katalog Produk** (statistik, pencarian, filter, urutan, Refresh) + tombol **+ Tambah Produk Baru**, **Edit**/**Hapus** per baris; `uji-crud-produk.js` **5/5 SESUI** | ✅ |
+| 47 | Pintasan CRUD di Beranda & Akun | Panel **Alat Administrasi** (Tambah/Edit/Hapus Produk), tombol AppBar **Kelola Produk**, menu admin di sidebar/bottom nav dan halaman Akun; hanya untuk admin | ✅ |
 
 ---
 
