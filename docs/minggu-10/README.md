@@ -39,7 +39,7 @@ mengikuti bentuk yang diminta modul:
 | `StreamBuilder` tiga keadaan | `StreamKeadaan<T>` dipakai Beranda & Riwayat Pesanan; Daftar Produk pakai `StreamBuilder` langsung |
 | Aturan bisnis sebelum Create | `cekAturanPesanan()` — cek stok dari server + tolak pesanan identik yang masih `Menunggu` |
 | Create & Read (modul resmi) | `skin_profiles` dan `orders` diisi lewat form |
-| Lanjutan CRUD produk admin | Panel **Katalog Produk** dengan **+ Tambah Produk Baru**, tombol bertulisan **Edit**/**Hapus** per baris — menulis/delete `products` di Firestore (hanya admin) |
+| Lanjutan CRUD produk admin | Panel **Katalog Produk** (statistik + **+ Tambah Produk Baru**), pencarian, filter, urutan, Refresh, tombol **Edit**/**Hapus** per baris — `products` di Firestore (hanya admin) |
 | Tabel uji ≥5 kasus | **10 kasus, 10/10 SESUI** di [`tabel-uji.md`](tabel-uji.md) bagian 5; tambahan **5/5** CRUD di bagian 6 |
 
 Pemetaan lengkap butir modul ada di [`modul-resmi.md`](modul-resmi.md).

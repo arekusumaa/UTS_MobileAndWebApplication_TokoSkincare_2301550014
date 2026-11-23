@@ -57,7 +57,7 @@
 | 43 | Skrip pendukung | `promote_admin.py`, `uji_rules.py`, `verifikasi_data.py`, `uji-firestore-m10.js`, `uji-modul-m10.js`, `uji-role-admin.js`, `uji-crud-produk.js`, `buat-bukti-data.js` | ✅ |
 | 44 | Dokumentasi `docs/minggu-10/` | 9 berkas Markdown + JSON hasil uji + bukti | ✅ |
 | 45 | Role admin tampil benar | Badge **Admin** + menu Dashboard Admin (`bukti/22-role-admin-tampil.png`) | ✅ |
-| 46 | CRUD produk admin | Panel **Katalog Produk** + tombol **+ Tambah Produk Baru**, tombol bertulisan **Edit**/**Hapus** per baris; `uji-crud-produk.js` **5/5 SESUI** | ✅ |
+| 46 | CRUD produk admin | Panel **Katalog Produk** (statistik, pencarian, filter, urutan, Refresh) + tombol **+ Tambah Produk Baru**, **Edit**/**Hapus** per baris; `uji-crud-produk.js` **5/5 SESUI** | ✅ |
 
 ---
 

@@ -116,6 +116,10 @@ class ProductProvider extends ChangeNotifier {
     _onDataBerubah();
   }
 
+  /// Memuat ulang cache dari sumber data (Firestore / mock). Berguna untuk
+  /// tombol Refresh di halaman Kelola Produk.
+  void refreshData() => _onDataBerubah();
+
   @override
   void dispose() {
     _sync?.removeListener(_onDataBerubah);

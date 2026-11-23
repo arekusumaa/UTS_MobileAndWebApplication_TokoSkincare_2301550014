@@ -113,9 +113,16 @@ class _FormProdukScreenState extends State<FormProdukScreen> {
       appBar: AppBar(
         title: Text(widget.product != null ? 'Edit Produk' : 'Tambah Produk'),
         leading: IconButton(
+          tooltip: 'Kembali tanpa menyimpan',
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal'),
+          ),
+        ],
       ),
       body: Form(
         key: _formKey,

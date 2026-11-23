@@ -180,14 +180,22 @@ FAB `+`, dan ikon edit/hapus tanpa keterangan.
 
 Tampilan `lib/screens/admin/kelola_produk_screen.dart` sudah diperbarui:
 
-- Panel header **"Katalog Produk"** menampilkan jumlah produk dan tombol
-  besar bertulisan **"+ Tambah Produk Baru"** (di mobile: **"+ Tambah"**).
-- Setiap baris produk kini memakai tombol bertulisan **Edit** dan **Hapus**,
-  bukan lagi ikon kecil tanpa label. Keduanya diberi `Tooltip` dengan nama
-  produk agar mudah dikenali pembaca layar dan otomasi.
-- Baris produk tetap bisa diklik untuk masuk ke form edit.
-- Alur hapus tetap memakai dialog konfirmasi.
-- FAB dan tombol AppBar yang duplikat dihilangkan supaya tidak membingungkan.
+- Panel header **Katalog Produk** memakai latar gradien pink, tiga kartu
+  statistik (**Produk**, **Stok menipis**, **Stok habis**), dan tombol besar
+  **"+ Tambah Produk Baru"** (di mobile: **"+ Tambah"**).
+- Kolom pencarian nama/kategori/kandungan, `ChoiceChip` filter kategori,
+  dropdown urutan (nama A–Z/Z–A, harga, stok), keterangan
+  "Menampilkan X dari Y produk", serta tombol **Reset filter**.
+- Setiap baris memakai avatar berwarna sesuai kategori, badge status stok
+  (**Aman** / **Menipis** / **Habis**), dan tombol bertulisan **Edit** /
+  **Hapus** dengan `Tooltip` nama produk.
+- Baris tetap bisa diklik untuk edit; hapus lewat dialog konfirmasi.
+- Empty state dibedakan antara "Belum ada produk" dan "Produk tidak ditemukan".
+- AppBar punya tombol **Refresh** (`ProductProvider.refreshData()`) dan
+  **Tambah**; form produk diberi tombol **Batal**.
+
+Semua kontrol di atas benar-benar berfungsi. Filter dan pengurutan dilakukan
+di sisi Dart dari snapshot Firestore, jadi tidak butuh composite index baru.
 
 Operasi tulis sudah memakai jalur yang aman:
 
