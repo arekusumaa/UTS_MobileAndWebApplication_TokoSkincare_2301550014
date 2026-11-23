@@ -1,0 +1,42 @@
+{
+  "total": 5,
+  "sesuai": 5,
+  "hasil": [
+    {
+      "no": 1,
+      "kasus": "Admin menambah produk lewat form",
+      "diharapkan": "Dokumen products baru dengan harga 77777 dan stok 13",
+      "nyata": "id=P1795410599, harga=77777, stok=13",
+      "status": "SESUI"
+    },
+    {
+      "no": 2,
+      "kasus": "Produk baru tampil di daftar Kelola Produk",
+      "diharapkan": "Nama produk uji muncul di daftar setelah snapshot Firestore",
+      "nyata": "nama produk uji tampil di halaman Kelola Produk",
+      "status": "SESUI"
+    },
+    {
+      "no": 3,
+      "kasus": "Admin mengedit harga produk",
+      "diharapkan": "harga berubah menjadi 88888 di server",
+      "nyata": "harga di server = 88888",
+      "status": "SESUI"
+    },
+    {
+      "no": 4,
+      "kasus": "Admin menghapus produk",
+      "diharapkan": "dokumen produk uji tidak ada lagi di server",
+      "nyata": "dokumen tidak ditemukan di server",
+      "status": "SESUI"
+    },
+    {
+      "no": 5,
+      "kasus": "Pelanggan tidak melihat menu Dashboard Admin",
+      "diharapkan": "menu admin tidak muncul untuk rina@mail.com",
+      "nyata": "Dashboard Admin tidak muncul",
+      "status": "SESUI"
+    }
+  ],
+  "consoleErrors": []
+}

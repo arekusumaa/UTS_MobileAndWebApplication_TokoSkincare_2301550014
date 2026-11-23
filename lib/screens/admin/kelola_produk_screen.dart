@@ -17,9 +17,21 @@ class KelolaProdukScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Kelola Produk'),
         leading: IconButton(
+          tooltip: 'Kembali ke Dashboard Admin',
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/admin'),
         ),
+        // Tombol eksplisit supaya admin tidak perlu menebak FAB "+".
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: AppConstants.margin),
+            child: TextButton.icon(
+              onPressed: () => context.push('/admin/produk/form'),
+              icon: const Icon(Icons.add),
+              label: const Text('Tambah Produk'),
+            ),
+          ),
+        ],
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(AppConstants.margin),
@@ -41,10 +53,12 @@ class KelolaProdukScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
+                    tooltip: 'Edit ${p.nama}',
                     icon: const Icon(Icons.edit_outlined, color: AppColors.primary, size: 20),
                     onPressed: () => context.push('/admin/produk/form', extra: p),
                   ),
                   IconButton(
+                    tooltip: 'Hapus ${p.nama}',
                     icon: const Icon(Icons.delete_outline, color: AppColors.error, size: 20),
                     onPressed: () {
                       showDialog(
@@ -77,6 +91,7 @@ class KelolaProdukScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        tooltip: 'Tambah produk baru',
         onPressed: () => context.push('/admin/produk/form'),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
