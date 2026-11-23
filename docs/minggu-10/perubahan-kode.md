@@ -170,3 +170,36 @@ Bukti: `docs/minggu-10/bukti/22-role-admin-tampil.png` (badge **Admin** dan menu
 **Dashboard Admin — Kelola produk & pesanan** muncul). Uji otomatis:
 `test/validasi_auth_test.dart` grup `tentukanRole` (5 kasus) dan
 `test/mock_user_source_test.dart` (5 kasus). Total `flutter test` **59/59**.
+
+## 8. Lanjutan — CRUD produk admin (Update/Delete)
+
+Modul Minggu 10 hanya mewajibkan Create & Read; Update/Delete sudah ada di
+kode sejak awal lewat `ProductRepository` dan benar-benar menulis ke
+Firestore. Yang kurang adalah **keterlihatan**: tombol tambah hanya berupa
+FAB `+`, dan ikon edit/hapus tanpa tooltip.
+
+Perbaikan pada `lib/screens/admin/kelola_produk_screen.dart`:
+
+- AppBar kini memuat tombol teks eksplisit **"+ Tambah Produk"** (FAB tetap ada).
+- Ikon edit memakai tooltip `Edit <nama produk>`, ikon hapus
+  `Hapus <nama produk>`, FAB `Tambah produk baru`, tombol kembali diberi
+  tooltip juga.
+- Alur hapus tetap memakai dialog konfirmasi.
+
+Operasi tulis sudah memakai jalur yang aman:
+
+| Aksi | Kode | Dokumen Firestore |
+|---|---|---|
+| Tambah | `ProductProvider.addProduct()` → `FirestoreDataSource.addProduct()` | `products/{id}` — `set()` + `createdAt` |
+| Edit | `ProductProvider.updateProduct()` | `set(SetOptions(merge: true))` + `updatedAt` |
+| Hapus | `ProductProvider.deleteProduct()` | `products/{id}.delete()` |
+
+Security Rules `match /products/{productId}` mengizinkan create/update/delete
+**hanya untuk admin**; pelanggan hanya boleh membaca dan menurunkan `stok`.
+
+Uji integrasi `video/scripts/uji-crud-produk.js` (login admin → tambah → cek
+server → edit → cek server → hapus → cek server → logout → login pelanggan →
+cek menu admin): **5/5 SESUI**, 0 console error. Bukti:
+`bukti/23-crud-tambah-produk.png`, `bukti/24-crud-edit-produk.png`,
+`bukti/hasil-uji-crud-produk.json`. Dokumen uji otomatis sudah dihapus dari
+database (jumlah `products` kembali ke 10).

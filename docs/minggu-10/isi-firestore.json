@@ -1,5 +1,5 @@
 {
-  "tanggal": "2026-11-16T05:07:41.405895+00:00",
+  "tanggal": "2026-11-23T05:11:18.756559+00:00",
   "project": "toko-skincare-fec17",
   "lokasi": "asia-southeast2",
   "collections": {
@@ -25,20 +25,20 @@
     "orders": [
       "ORD-20261116-28504",
       "ORD-20261116-59338",
-      "ORD-20261116-62942"
+      "ORD-20261116-62942",
+      "ORD-20261117-08214",
+      "ORD-20261117-76837"
     ],
     "carts": [],
-    "carts/{pelanggan}/items": [
-      "P01"
-    ]
+    "carts/{pelanggan}/items": []
   },
   "jumlah": {
     "users": 2,
     "products": 10,
     "skin_profiles": 1,
-    "orders": 3,
+    "orders": 5,
     "carts": 0,
-    "carts/{pelanggan}/items": 1
+    "carts/{pelanggan}/items": 0
   },
   "role": {
     "admin": {

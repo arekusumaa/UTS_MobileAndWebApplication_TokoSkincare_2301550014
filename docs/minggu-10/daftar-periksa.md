@@ -54,8 +54,10 @@
 | 40 | `flutter test` | **59/59 lulus** | ✅ |
 | 41 | `flutter build web --release` | Berhasil | ✅ |
 | 42 | Uji Rules / integrasi migrasi / integrasi modul | **13/13 · 8/8 · 10/10 SESUI**, 0 console error | ✅ |
-| 43 | Skrip pendukung | `promote_admin.py`, `uji_rules.py`, `verifikasi_data.py`, `uji-firestore-m10.js`, `uji-modul-m10.js`, `buat-bukti-data.js` | ✅ |
+| 43 | Skrip pendukung | `promote_admin.py`, `uji_rules.py`, `verifikasi_data.py`, `uji-firestore-m10.js`, `uji-modul-m10.js`, `uji-role-admin.js`, `uji-crud-produk.js`, `buat-bukti-data.js` | ✅ |
 | 44 | Dokumentasi `docs/minggu-10/` | 9 berkas Markdown + JSON hasil uji + bukti | ✅ |
+| 45 | Role admin tampil benar | Badge **Admin** + menu Dashboard Admin (`bukti/22-role-admin-tampil.png`) | ✅ |
+| 46 | CRUD produk admin | Tombol **+ Tambah Produk** eksplisit, ikon Edit/Hapus + tooltip; `uji-crud-produk.js` **5/5 SESUI** | ✅ |
 
 ---
 

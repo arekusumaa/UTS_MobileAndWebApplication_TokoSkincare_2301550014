@@ -136,7 +136,8 @@ Branch `minggu-10-firestore` mengganti `MockDataSource` dengan
 | Arsitektur | Cache lokal + listener `snapshots()` realtime + optimistic write — **15 halaman UI tidak diubah** |
 | Dependency injection | `lib/data/app_repositories.dart` → `firestore()` / `mock()` / `custom()`; `DataSync` menyegarkan semua Provider |
 | **Lapisan modul resmi** | `lib/services/layanan_firestore.dart` → `LayananToko` / `LayananFirestore` / `LayananMemori`; `StreamBuilder` + `.snapshots()` di Beranda, Daftar Produk, Riwayat Pesanan |
-| **Create & Read** | Form Profil Kulit → `skin_profiles/{uid}`; Checkout → `orders/{id}`; hanya Create/Read, Update/Delete menyusul Minggu 11 |
+| **Create & Read** | Form Profil Kulit → `skin_profiles/{uid}`; Checkout → `orders/{id}` |
+| **CRUD produk admin** | Dashboard Admin → Kelola Produk → tombol **+ Tambah Produk**, ikon **Edit** dan **Hapus** (dengan dialog konfirmasi); semuanya menulis/delete dokumen `products` di Firestore, hanya admin yang diizinkan |
 | **Aturan bisnis** | `cekAturanPesanan()` menolak stok kurang & pesanan identik yang masih `Menunggu` sebelum dokumen ditulis |
 | Keamanan | [`firestore.rules`](firestore.rules): default-deny, wajib login, isolasi per `uid`, validasi bentuk dokumen, `role` hanya bisa diubah admin |
 | Admin | `python scripts/promote_admin.py` menaikkan peran lewat kredensial pemilik project (klien tidak bisa mengangkat diri sendiri) |
@@ -145,9 +146,9 @@ Branch `minggu-10-firestore` mengganti `MockDataSource` dengan
 
 **Verifikasi**: `flutter analyze` 0 error/0 warning · `flutter test` **59/59** ·
 `flutter build web --release` berhasil · **uji Rules 13/13 SESUI** ·
-**uji integrasi Chrome 8/8 + 10/10 SESUI** (10 kasus resmi modul: Create
+**uji integrasi Chrome 8/8 + 10/10 + 5/5 SESUI** (10 kasus resmi modul: Create
 `skin_profiles`/`orders`, Read realtime, penolakan duplikat, persistensi F5,
-isolasi pengguna; 0 console error).
+isolasi pengguna; 5 kasus CRUD produk admin; 0 console error).
 
 Dokumentasi lengkap: [pemetaan modul resmi](docs/minggu-10/modul-resmi.md),
 [README Minggu 10](docs/minggu-10/README.md),

@@ -156,7 +156,26 @@ Bukti screenshot: `bukti/10-profil-kulit-tersimpan.png` … `bukti/18-isolasi-pe
 
 ---
 
-## 6. Cara mengulang seluruh pengujian
+## 6. Lanjutan — CRUD produk admin (5 kasus)
+
+Dijalankan dengan `node video/scripts/uji-crud-produk.js`. Setiap perubahan UI
+diverifikasi ulang langsung ke server Firestore memakai token pemilik project.
+
+| No | Kasus | Diharapkan | Hasil nyata | Status |
+|---|---|---|---|---|
+| 1 | Admin menambah produk lewat tombol "+ Tambah Produk" | Dokumen `products` baru, harga 77777, stok 13 | `P1795410599`, harga 77777, stok 13 | SESUI |
+| 2 | Produk baru tampil di daftar Kelola Produk | Nama muncul setelah snapshot Firestore | Nama tampil di daftar | SESUI |
+| 3 | Admin mengedit harga produk | Harga jadi 88888 di server | `harga = 88888` | SESUI |
+| 4 | Admin menghapus produk | Dokumen hilang dari server | Tidak ditemukan | SESUI |
+| 5 | Pelanggan membuka halaman Akun | Menu Dashboard Admin tidak muncul | Menu tidak muncul | SESUI |
+
+**5/5 SESUI**, 0 console error. Dokumen uji sudah dihapus sehingga `products`
+kembali berisi 10 dokumen. Bukti: `bukti/23-crud-tambah-produk.png`,
+`bukti/24-crud-edit-produk.png`, `bukti/hasil-uji-crud-produk.json`.
+
+---
+
+## 7. Cara mengulang seluruh pengujian
 
 ```bash
 # 0. Pastikan rules aktif & token firebase-tools segar
@@ -177,6 +196,8 @@ python -m http.server 8137 --directory build/web --bind 127.0.0.1
 # 4. Integrasi UI (terminal B)
 cd video && NO_PROXY="127.0.0.1,localhost" node scripts/uji-firestore-m10.js   # 8/8
 cd video && NO_PROXY="127.0.0.1,localhost" node scripts/uji-modul-m10.js      # 10/10
+cd video && NO_PROXY="127.0.0.1,localhost" node scripts/uji-role-admin.js     # role admin
+cd video && NO_PROXY="127.0.0.1,localhost" node scripts/uji-crud-produk.js    # 5/5 CRUD
 cd video && NO_PROXY="127.0.0.1,localhost" node scripts/buat-bukti-data.js    # gambar isi collection
 
 # 5. Rekam isi database

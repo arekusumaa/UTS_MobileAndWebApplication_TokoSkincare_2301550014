@@ -38,15 +38,16 @@ mengikuti bentuk yang diminta modul:
 | `lib/services/layanan_firestore.dart` | `LayananToko` + `LayananFirestore` (`.snapshots()`) + `LayananMemori` (widget test) |
 | `StreamBuilder` tiga keadaan | `StreamKeadaan<T>` dipakai Beranda & Riwayat Pesanan; Daftar Produk pakai `StreamBuilder` langsung |
 | Aturan bisnis sebelum Create | `cekAturanPesanan()` — cek stok dari server + tolak pesanan identik yang masih `Menunggu` |
-| Create & Read saja | `skin_profiles` dan `orders` diisi lewat form; tidak ada tombol Edit/Delete baru |
-| Tabel uji ≥5 kasus | **10 kasus, 10/10 SESUI** di [`tabel-uji.md`](tabel-uji.md) bagian 5 |
+| Create & Read (modul resmi) | `skin_profiles` dan `orders` diisi lewat form |
+| Lanjutan CRUD produk admin | Tombol **+ Tambah Produk**, ikon **Edit**/**Hapus** di Kelola Produk — menulis/delete `products` di Firestore (hanya admin) |
+| Tabel uji ≥5 kasus | **10 kasus, 10/10 SESUI** di [`tabel-uji.md`](tabel-uji.md) bagian 5; tambahan **5/5** CRUD di bagian 6 |
 
 Pemetaan lengkap butir modul ada di [`modul-resmi.md`](modul-resmi.md).
 
 **Ringkasan verifikasi terakhir:** `flutter analyze` 0 error/0 warning ·
 `flutter test` **59/59** · `flutter build web --release` berhasil ·
 uji Rules **13/13** · integrasi migrasi **8/8** · integrasi modul resmi
-**10/10 SESUI**, tanpa console error.
+**10/10 SESUI** · integrasi CRUD produk **5/5 SESUI**, tanpa console error.
 
 ---
 
